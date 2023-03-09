@@ -17,7 +17,7 @@ namespace SleekEcommerce.Models
         public decimal Price { get; set; }
         public int Discount { get; set; }
         public DateTime DateCreated { get; set; }
-        [Column(TypeName = "varchar(50")]
+        [Column(TypeName = "varchar(500)")]
         public string ImageLocation { get; set; }
     }
 }
