@@ -4,6 +4,7 @@
     ViewData["Title"] = "Home";
 }
 
+@* Jumbotron *@
 <div class="bg-primary container-fluid text-white py-5">
     <div class="container py-5">
         <h1>
@@ -24,10 +25,11 @@
 
 </div>
 
+@* Products grid list *@
 <section>
     <div class="container my-5">
         <header class="mb-4">
-            <h3>New products</h3>
+            <h3>New Arrivals</h3>
         </header>
 
         <div class="row">
@@ -40,8 +42,8 @@
                             <h5 class="card-title">GoPro HERO6 4K Action Camera - Black</h5>
                             <p class="card-text">$790.50</p>
                             <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                                <a href="#!" class="btn btn-primary shadow-0 me-1">Add to cart</a>
-                                <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                                <a href="/" class="btn btn-primary shadow-0 me-1">Add to cart</a>
+                                <a href="/" class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -49,10 +51,13 @@
             }
             
         </div>
+        <div class="d-flex justify-content-center m-4">
+            <a href="/products" class="btn btn-primary shadow-0 me-1 ">View all products</a>
+        </div>
     </div>
 </section>
 
-@* Why choose us *@
+@* Why choose us section *@
 <section class="mt-5" style="background-color: #f5f5f5;">
     <div class="container text-dark pt-3">
         <header class="pt-4 pb-3">

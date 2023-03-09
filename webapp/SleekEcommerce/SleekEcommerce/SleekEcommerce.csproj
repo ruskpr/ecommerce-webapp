@@ -16,4 +16,8 @@
     <PackageReference Include="TailwindCssTagHelpers" Version="0.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
