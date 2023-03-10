@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xoRf8uBq2qV4FenptYHp3HDsQ4cyR4Qos99lA76UbgArxJjRS0IJHiz/DDohQ8fNN6yl6Inaip9PUN7flStfTQ==",
+  "dgSpecHash": "YPBh0C5PuhMlHkDzqFzG4GJkCxH5uc9tduRGnCcaS0ujfQWEJdvq/NHu5MHlc8myGY+I0cpt1WGBTr1XOMUXHg==",
   "success": true,
   "projectFilePath": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\SleekEcommerce.csproj",
   "expectedPackageFiles": [
@@ -78,7 +78,7 @@
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\rustu.koprulu\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\rustu.koprulu\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\nuget.common\\6.3.1\\nuget.common.6.3.1.nupkg.sha512",
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\nuget.configuration\\6.3.1\\nuget.configuration.6.3.1.nupkg.sha512",
     "C:\\Users\\rustu.koprulu\\.nuget\\packages\\nuget.dependencyresolver.core\\6.3.1\\nuget.dependencyresolver.core.6.3.1.nupkg.sha512",

@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@* CODE *@
+
+@{
+    Helpers.CartHelper cartHelper = new Helpers.CartHelper();
+    List<Models.Product> products = cartHelper.GetCartItems(this.Context.Request);
+
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,7 +24,7 @@
             <div class="container">
                 <div class="row gy-3">
                     <!-- Left elements -->
-                    <div class="col-lg-2 col-sm-6 col-md-3 col-6 d-flex align-baseline ">
+                    <div class="col-lg-2 col-sm-6 col-md-3 col-6 d-flex align-baseline d-none d-sm-block ">
                         <a href="/" class="float-start navbar-brand text-nowrap">
                             Sleek Clothing Co.
                         </a>
@@ -35,16 +43,19 @@
                     </div>
                     <!-- Center elements -->
                     <!-- Right elements -->
-                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-6">
+                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-12">
                         <div class="d-flex float-end">
 
-                            <a href="#" 
-                            data-bs-toggle="offcanvas" 
-                            data-bs-target="#offcanvasScrolling" 
-                            class="me-1 rounded py-1 px-3 nav-link d-flex align-items-center"> 
+                            <button data-bs-toggle="offcanvas" 
+                                data-bs-target="#offcanvasScrolling" 
+                                class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
                                 <i class="fas fa-cart-shopping m-1 me-md-2"></i>
-                                <p class="d-none d-md-block mb-0">Cart</p> 
-                            </a>
+                                
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    @products.Count @* ACTUAL CART COUNT GOES HERE *@
+                                </span>
+                            </button>
+                            
                         </div>
                     </div>
                     <!-- Right elements -->
@@ -80,6 +91,7 @@
         <!-- Lower Navbar -->
     </header>
 
+    @* BODY CONTENT *@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -88,11 +100,18 @@
 
     <!-- Sidebar (Offcanvas) -->
      <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+             @* Header *@   
+             <div class="offcanvas-header">
+                <h5 class="offcanvas-title fs-3" id="offcanvasScrollingLabel">Cart</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
+            @* Content *@
             <div class="offcanvas-body">
+                @* Render cart items here *@
+            @foreach (var product in products)
+            {
+                <p>@product.Name</p>
+            }
                 <p>Try scrolling the rest of the page to see this option in action.</p>
             </div>
         </div>
@@ -187,7 +206,7 @@
         </div>
     </footer>
     <!-- Footer -->
-
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

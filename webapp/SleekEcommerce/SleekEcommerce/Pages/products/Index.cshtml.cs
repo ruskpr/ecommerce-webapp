@@ -19,16 +19,27 @@ namespace SleekEcommerce.Pages.products
             _context = context;
         }
 
-        public IList<Product> Products { get;set; } = default!;
+        public IList<Product> Products { get => _context.Products.ToList(); set { Products = value; } }
 
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
             {
 
-                Products = await _context.Products.ToListAsync();
+                //Products = await _context.Products.ToListAsync();
                 
             }
         }
+
+
+        public void OnPostAddToCart(int productId)
+        {
+            Helpers.CartHelper cartHelper = new Helpers.CartHelper();
+
+            Product product = _context.Products.FirstOrDefault(x => x.Id == productId);
+            cartHelper.AddToCart(product, this.Request, this.HttpContext);
+
+        }
+
     }
 }
