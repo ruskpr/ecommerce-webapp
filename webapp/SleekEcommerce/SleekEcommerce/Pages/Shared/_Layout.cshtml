@@ -8,39 +8,43 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SleekEcommerce.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-    @*<script src="https://cdn.tailwindcss.com"></script>*@
 </head>
 <body>
     <header>
         <!-- Jumbotron -->
-        <div class="p-3 text-center bg-white border-bottom">
+        <div class="py-2 text-center bg-white border-bottom">
             <div class="container">
                 <div class="row gy-3">
                     <!-- Left elements -->
-                    <div class="col-lg-2 col-sm-4 col-4">
-
-                        <a href="https://mdbootstrap.com/" target="_blank" class="float-start navbar-brand">
+                    <div class="col-lg-2 col-sm-6 col-md-3 col-6 d-flex align-baseline ">
+                        <a href="/" class="float-start navbar-brand text-nowrap">
                             Sleek Clothing Co.
                         </a>
                     </div>
                     <!-- Left elements -->
                     <!-- Center elements -->
-                    <div class="order-lg-last col-lg-5 col-sm-8 col-8">
-                        <div class="d-flex float-end">
-                            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Cart</p> </a>
-                        </div>
+                    <div class="col-lg-8 col-md-6 col-8 d-none d-md-block">
+                        <form class="input-group  float-center d-flex justify-content-center align-items-start">
+                            <div class="form-outline">
+                                <input type="search" placeholder="Search..." id="form1" class="form-control" />
+                            </div>
+                            <button type="button" class="btn btn-primary shadow-0">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
                     </div>
                     <!-- Center elements -->
                     <!-- Right elements -->
-                    <div class="col-lg-5 col-md-12 col-12">
-                        <div class="input-group  float-center d-flex justify-content-center align-items-start">
-                            <div class="form-outline">
-                                <input type="search" placeholder="Search..." id="form1" class="form-control" />
-                                <label class="form-label" for="form1"></label>
-                            </div>
-                            <button type="button" class="btn btn-primary h-100 shadow-0">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-6">
+                        <div class="d-flex float-end">
+
+                            <a href="#" 
+                            data-bs-toggle="offcanvas" 
+                            data-bs-target="#offcanvasScrolling" 
+                            class="me-1 rounded py-1 px-3 nav-link d-flex align-items-center"> 
+                                <i class="fas fa-cart-shopping m-1 me-md-2"></i>
+                                <p class="d-none d-md-block mb-0">Cart</p> 
+                            </a>
                         </div>
                     </div>
                     <!-- Right elements -->
@@ -49,48 +53,30 @@
         </div>
         <!-- Jumbotron -->
         <!-- Lower Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-            <!-- Container wrapper -->
-            <div class="container justify-content-center justify-content-md-between">
-                <!-- Toggle button -->
-                <button class="navbar-toggler border py-2 text-dark"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#navbarLeftAlignExample"
-                        aria-controls="navbarLeftAlignExample"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
+        <div class="border-bottom">
+            <nav class="container navbar navbar-expand-lg navbar-light bg-white">
+                <!-- Container wrapper -->
+                <ul class="d-flex flex-row navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="/products">All Products</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Deals</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Tops</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Bottoms</a>
+                    </li>
 
-                <!-- Collapsible wrapper -->
-                <div class="position-sticky" id="navbarLeftAlignExample">
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/products">All Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Deals</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Tops</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Bottoms</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Jackets</a>
-                        </li>                       
-                    </ul>
-                    <!-- Left links -->
-                </div>
-            </div>
-            <!-- Container wrapper -->
-        </nav>
+                </ul>
+                <!-- Container wrapper -->
+            </nav>
+        </div>
         <!-- Lower Navbar -->
     </header>
 
@@ -99,6 +85,17 @@
             @RenderBody()
         </main>
     </div>
+
+    <!-- Sidebar (Offcanvas) -->
+     <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
 
     <footer class="text-center text-lg-start text-muted mt-3" style="background-color: #f5f5f5;">
         <!-- Section: Links  -->
@@ -109,11 +106,9 @@
                     <!-- Grid column -->
                     <div class="col-12 col-lg-3 col-sm-12 mb-2">
                         <!-- Content -->
-                        <a href="https://mdbootstrap.com/" target="_blank" class="">
-                            <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
-                        </a>
+                        
                         <p class="mt-2 text-dark">
-                            © 2023 Copyright: MDBootstrap.com
+                            © 2023 Sleek Clothing 
                         </p>
                     </div>
                     <!-- Grid column -->
@@ -180,48 +175,13 @@
                 <div class="d-flex justify-content-between py-4 border-top">
                     <!--- payment --->
                     <div>
-                        <i class="fab fa-lg fa-cc-visa text-dark"></i>
-                        <i class="fab fa-lg fa-cc-amex text-dark"></i>
-                        <i class="fab fa-lg fa-cc-mastercard text-dark"></i>
-                        <i class="fab fa-lg fa-cc-paypal text-dark"></i>
+                        <i class="fab fa-xl fa-cc-visa text-dark"></i>
+                        <i class="fab fa-xl fa-cc-amex text-dark"></i>
+                        <i class="fab fa-xl fa-cc-mastercard text-dark"></i>
+                        <i class="fab fa-xl fa-cc-paypal text-dark"></i>
                     </div>
                     <!--- payment --->
-                    <!--- language selector --->
-                    <div class="dropdown dropup">
-                        <a class="dropdown-toggle text-dark" href="/" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="Dropdown">
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
-                            </li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-poland flag"></i>Polski</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-china flag"></i>中文</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-japan flag"></i>日本語</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-germany flag"></i>Deutsch</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-france flag"></i>Français</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-spain flag"></i>Español</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-russia flag"></i>Русский</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/"><i class="flag-portugal flag"></i>Português</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--- language selector --->
+                    
                 </div>
             </div>
         </div>

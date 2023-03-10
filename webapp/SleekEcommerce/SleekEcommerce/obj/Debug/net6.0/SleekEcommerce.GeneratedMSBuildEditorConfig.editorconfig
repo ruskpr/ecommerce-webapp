@@ -48,6 +48,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/productsTMP/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNUTVBcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/productsTMP/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNUTVBcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/productsTMP/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNUTVBcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/productsTMP/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNUTVBcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/productsTMP/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNUTVBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/products/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNccHJvZHVjdHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

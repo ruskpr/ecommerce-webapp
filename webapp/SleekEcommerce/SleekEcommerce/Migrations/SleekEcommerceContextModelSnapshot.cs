@@ -17,10 +17,13 @@ namespace SleekEcommerce.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.14")
+                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("SleekEcommerce.Models.Category", b =>
                 {
@@ -28,7 +31,7 @@ namespace SleekEcommerce.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,7 +48,7 @@ namespace SleekEcommerce.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -64,19 +67,19 @@ namespace SleekEcommerce.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("SKU")
                         .IsRequired()
                         .HasColumnType("varchar(8)");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<decimal>("price")
-                        .HasColumnType("decimal");
 
                     b.HasKey("Id");
 

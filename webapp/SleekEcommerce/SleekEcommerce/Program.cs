@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<SleekEcommerceContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SleekEcommerceContext") ?? throw new InvalidOperationException("Connection string 'SleekEcommerceContext' not found.")));
+    options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("SleekEcommerceContext") ?? throw new InvalidOperationException("Connection string 'SleekEcommerceContext' not found.")));
 
 var app = builder.Build();
 
@@ -26,5 +26,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
 
 app.Run();

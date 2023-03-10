@@ -19,13 +19,15 @@ namespace SleekEcommerce.Pages.products
             _context = context;
         }
 
-        public IList<Product> Product { get;set; } = default!;
+        public IList<Product> Products { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
             {
-                Product = await _context.Products.ToListAsync();
+
+                Products = await _context.Products.ToListAsync();
+                
             }
         }
     }

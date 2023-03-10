@@ -50,6 +50,11 @@
                 <span asp-validation-for="Product.DateCreated" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Product.ImageLocation" class="control-label"></label>
+                <input asp-for="Product.ImageLocation" class="form-control" />
+                <span asp-validation-for="Product.ImageLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

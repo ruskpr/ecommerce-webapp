@@ -23,6 +23,23 @@
                 <input asp-for="Product.Desc" class="form-control" />
                 <span asp-validation-for="Product.Desc" class="text-danger"></span>
             </div>
+            @*<div class="form-group">
+                <label asp-for="Product.Category" class="control-label"></label>
+                <input asp-for="Product.Category.Name" class="form-control" />
+                <span asp-validation-for="Product.Category.Name" class="text-danger"></span>
+            </div>*@
+            <div>
+                <label asp-for="Product.Category" class="control-label"></label>
+
+                <select asp-for="Product.Category.Name" class="form-select" aria-label="select category">
+                    <option selected>Tops</option>
+                    <option value="1">Bottoms</option>
+                    <option value="2">Accessories</option>
+                    <option value="3">Jackets</option>
+                    <option value="4">Hoodies</option>
+                </select>
+
+            </div>
             <div class="form-group">
                 <label asp-for="Product.SKU" class="control-label"></label>
                 <input asp-for="Product.SKU" class="form-control" />
@@ -48,7 +65,12 @@
                 <input asp-for="Product.DateCreated" class="form-control" />
                 <span asp-validation-for="Product.DateCreated" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
+                <label asp-for="Product.ImageLocation" class="control-label"></label>
+                <input asp-for="Product.ImageLocation" class="form-control" />
+                <span asp-validation-for="Product.ImageLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

@@ -13,6 +13,22 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\wwwroot\\images\\blackshirt.jfif",
+      "PackagePath": "staticwebassets\\images\\blackshirt.jfif"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\wwwroot\\images\\blacktshirt.png",
+      "PackagePath": "staticwebassets\\images\\blacktshirt.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\wwwroot\\images\\hoodie.png",
+      "PackagePath": "staticwebassets\\images\\hoodie.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\wwwroot\\images\\skinnyjeans.png",
+      "PackagePath": "staticwebassets\\images\\skinnyjeans.png"
+    },
+    {
       "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekEcommerce\\SleekEcommerce\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
