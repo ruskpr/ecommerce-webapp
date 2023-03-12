@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SleekEcommerce.Data;
+using SleekEcommerce.Helpers;
 using SleekEcommerce.Models;
 
 namespace SleekEcommerce.Pages.products
@@ -19,26 +20,26 @@ namespace SleekEcommerce.Pages.products
             _context = context;
         }
 
-        public IList<Product> Products { get => _context.Products.ToList(); set { Products = value; } }
+        public IList<Product> Products { get; set; }
 
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
             {
 
-                //Products = await _context.Products.ToListAsync();
+                Products = await _context.Products.ToListAsync();
                 
             }
         }
 
 
-        public void OnPostAddToCart(int productId)
+        public IActionResult OnPostAddToCart(int productId)
         {
-            Helpers.CartHelper cartHelper = new Helpers.CartHelper();
+            Product product = _context.Products.First(x => x.Id == productId);
+            CartHelper.AddToCart(product, this.HttpContext);
 
-            Product product = _context.Products.FirstOrDefault(x => x.Id == productId);
-            cartHelper.AddToCart(product, this.Request, this.HttpContext);
-
+            Products = _context.Products.ToList();
+            return Page();
         }
 
     }

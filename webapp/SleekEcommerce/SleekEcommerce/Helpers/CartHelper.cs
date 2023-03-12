@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekEcommerce.Models;
 using System;
@@ -9,7 +10,7 @@ namespace SleekEcommerce.Helpers
 
         const string COOKIE_NAME = "SleekCartData";
 
-        public void CreateCart(HttpContext httpContext)
+        private static void CreateCart(HttpContext httpContext)
         {
             // create cookie
             var cookieOptions = new CookieOptions
@@ -20,16 +21,16 @@ namespace SleekEcommerce.Helpers
             
         }
 
-        public void AddToCart(Product product, HttpRequest httpRequest, HttpContext httpContext)
+        public static void AddToCart(Product product, HttpContext httpContext)
         {
-            var cookieValue = httpRequest.Cookies[COOKIE_NAME];
+            var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
             if (cookieValue == null)
             {
                 CreateCart(httpContext);
             }
 
             // get current items if there are any
-            var cartItems = GetCartItems(httpRequest);
+            var cartItems = GetCartItems(httpContext.Request);
 
             // append to list
             cartItems.Add(product);
@@ -41,12 +42,10 @@ namespace SleekEcommerce.Helpers
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
-        public void RemoveFromCart(Product product, HttpRequest httpRequest, HttpContext httpContext)
+        public static void RemoveFromCart(Product product, HttpContext httpContext)
         {
-            var cookieValue = httpRequest.Cookies[COOKIE_NAME];
-
             // get current items if there are any
-            var cartItems = GetCartItems(httpRequest);
+            var cartItems = GetCartItems(httpContext.Request);
 
             // append to list
             foreach (var item in cartItems)
@@ -65,7 +64,7 @@ namespace SleekEcommerce.Helpers
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
-        public List<Product> GetCartItems(HttpRequest httpRequest)
+        public static List<Product> GetCartItems(HttpRequest httpRequest)
         {
             var cookieValue = httpRequest.Cookies[COOKIE_NAME];
             if (cookieValue == null)
@@ -73,9 +72,39 @@ namespace SleekEcommerce.Helpers
                 return new List<Product>(); // return empty list if cookie is null
             }
 
-            var cartItems = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
+            var productsFromCookie = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
 
-            return cartItems ?? new List<Product>(); // return empty list if cookie is null
+            List<Product> products = new List<Product>();
+            for (int i = 0; i < productsFromCookie.Count; i++)
+            {
+                if (products.Where(x => x.Id == productsFromCookie[i].Id).Count() > 0)
+                { 
+                    products.Last().CartQuantity += 1;
+                    continue;
+                }
+
+                products.Add(productsFromCookie[i]);
+                products.Last().CartQuantity += 1;  
+            }
+
+
+            return products ?? new List<Product>(); // return empty list if cookie is null
+        }
+
+        
+
+        public static decimal GetCartTotal(HttpRequest httpRequest)
+        {
+            decimal total = 0;
+
+            var items = GetCartItems(httpRequest);
+
+            foreach (var item in items)
+            {
+                total += item.PriceAfterDiscount;
+            }
+
+            return total;
         }
     }
 }

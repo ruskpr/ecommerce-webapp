@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = E:\russ\repos\sleek-ecommerce-webapp\webapp\SleekEcommerce\SleekEcommerce
 build_property._RazorSourceGeneratorDebug = 
 
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Data/CartDisplay.razor]
+build_metadata.AdditionalFiles.TargetPath = RGF0YVxDYXJ0RGlzcGxheS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekEcommerce/SleekEcommerce/Pages/categories/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcY2F0ZWdvcmllc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

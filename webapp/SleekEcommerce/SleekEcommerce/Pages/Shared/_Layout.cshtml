@@ -1,9 +1,10 @@
 ﻿@* CODE *@
-
+@using Helpers
 @{
-    Helpers.CartHelper cartHelper = new Helpers.CartHelper();
-    List<Models.Product> products = cartHelper.GetCartItems(this.Context.Request);
+    CartHelper cartHelper = new CartHelper();
+    List<Models.Product> products = CartHelper.GetCartItems(this.Context.Request);
 
+    
 }
 
 <!DOCTYPE html>
@@ -110,9 +111,28 @@
                 @* Render cart items here *@
             @foreach (var product in products)
             {
-                <p>@product.Name</p>
+                <div class="d-flex gap-2 mb-2 align-items-center">
+                    <p>@product.Name</p><span>x @product.CartQuantity</span>
+                    <p>@product.Price.ToString("c2")</p>
+                    <button class="btn btn-light">remove</button>
+                </div>
+
+                <div class="card mb-3" style="max-width: 540px;">
+                  <div class="row g-0">
+                    <div class="col">
+                      <img src="@product.ImageLocation" style="width: 70px;" class="h-100 img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-10">
+                      <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Price.ToString("c2")</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
             }
-                <p>Try scrolling the rest of the page to see this option in action.</p>
+            <p>Total @CartHelper.GetCartTotal(this.Context.Request).ToString("c2")</p>
             </div>
         </div>
 

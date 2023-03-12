@@ -33,6 +33,9 @@ namespace SleekEcommerce.Models
         }
 
         [NotMapped]
+        public int CartQuantity { get; set; }
+
+        [NotMapped]
         public bool IsOutOfStock
         {
             get { return Quantity == 0; }
