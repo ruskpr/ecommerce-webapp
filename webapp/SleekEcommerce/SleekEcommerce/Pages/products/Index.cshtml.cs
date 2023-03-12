@@ -22,6 +22,8 @@ namespace SleekEcommerce.Pages.products
 
         public IList<Product> Products { get; set; }
 
+        public string SearchTerm { get; set; }
+
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
@@ -41,6 +43,7 @@ namespace SleekEcommerce.Pages.products
             Products = _context.Products.ToList();
             return Page();
         }
+
 
     }
 }

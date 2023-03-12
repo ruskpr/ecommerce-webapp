@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekEcommerce.Models;
@@ -64,6 +65,8 @@ namespace SleekEcommerce.Helpers
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
+
+        // get list of one of each item in cart but filtered with the correct quantity
         public static List<Product> GetCartItems(HttpRequest httpRequest)
         {
             var cookieValue = httpRequest.Cookies[COOKIE_NAME];
@@ -90,8 +93,20 @@ namespace SleekEcommerce.Helpers
 
             return products ?? new List<Product>(); // return empty list if cookie is null
         }
+  
+        // total items in cart
+        public static int GetCartItemsCount(HttpContext httpContext)
+        {
+            var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
+            if (cookieValue == null)
+            {
+                return 0; // return 0 if no cart exists
+            }
 
-        
+            var productsFromCookie = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
+            
+            return productsFromCookie.Count();
+        }
 
         public static decimal GetCartTotal(HttpRequest httpRequest)
         {
@@ -101,7 +116,7 @@ namespace SleekEcommerce.Helpers
 
             foreach (var item in items)
             {
-                total += item.PriceAfterDiscount;
+                total += item.PriceAfterDiscount * item.CartQuantity;
             }
 
             return total;

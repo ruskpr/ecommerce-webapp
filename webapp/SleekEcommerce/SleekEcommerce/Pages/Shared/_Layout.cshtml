@@ -1,7 +1,6 @@
 ﻿@* CODE *@
 @using Helpers
 @{
-    CartHelper cartHelper = new CartHelper();
     List<Models.Product> products = CartHelper.GetCartItems(this.Context.Request);
 
     
@@ -52,9 +51,13 @@
                                 class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
                                 <i class="fas fa-cart-shopping m-1 me-md-2"></i>
                                 
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                    @products.Count @* ACTUAL CART COUNT GOES HERE *@
-                                </span>
+                                @if (CartHelper.GetCartItemsCount(this.Context) > 0)
+                                {
+                                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                        @CartHelper.GetCartItemsCount(this.Context)
+                                   </span> 
+                                }
+                                
                             </button>
                             
                         </div>
@@ -102,37 +105,49 @@
     <!-- Sidebar (Offcanvas) -->
      <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
              @* Header *@   
-             <div class="offcanvas-header">
-                <h5 class="offcanvas-title fs-3" id="offcanvasScrollingLabel">Cart</h5>
+             <div class="offcanvas-header mx-4">
+                <h5 class="offcanvas-title fs-3" id="offcanvasScrollingLabel">My items</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             @* Content *@
             <div class="offcanvas-body">
                 @* Render cart items here *@
-            @foreach (var product in products)
+            @foreach (var product in products) 
             {
-                <div class="d-flex gap-2 mb-2 align-items-center">
-                    <p>@product.Name</p><span>x @product.CartQuantity</span>
-                    <p>@product.Price.ToString("c2")</p>
-                    <button class="btn btn-light">remove</button>
-                </div>
-
-                <div class="card mb-3" style="max-width: 540px;">
+               <div class="card m-4" style="max-width: 540px;">
                   <div class="row g-0">
                     <div class="col">
-                      <img src="@product.ImageLocation" style="width: 70px;" class="h-100 img-fluid rounded-start" alt="...">
+                      <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
                     </div>
-                    <div class="col-10">
+                    <div class="col-9">
                       <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">@product.Price.ToString("c2")</p>
                       </div>
                     </div>
                   </div>
+                    @if (product.CartQuantity > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
+                            @product.CartQuantity
+                        </span>
+                    }
+
                 </div>
 
             }
-            <p>Total @CartHelper.GetCartTotal(this.Context.Request).ToString("c2")</p>
+            @if (products.Count == 0)
+            {
+                <p class="fw-light fs-4 mx-4">No items in your cart</p>
+                <span class="fs-6 mx-4"><a href="/products">View products</a></span>
+            } else
+            {
+                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotal(this.Context.Request).ToString("c2")</p>
+                <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+                <span class="fs-6"><a href="/cart">View full cart</a></span>
+            }
+            
+
             </div>
         </div>
 

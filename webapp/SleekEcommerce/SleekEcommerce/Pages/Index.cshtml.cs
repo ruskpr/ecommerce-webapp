@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using SleekEcommerce.Helpers;
 using SleekEcommerce.Models;
 
 namespace SleekEcommerce.Pages
@@ -32,6 +33,15 @@ namespace SleekEcommerce.Pages
                 Products = await _context.Products.ToListAsync();
 
             }
+        }
+
+        public IActionResult OnPostAddToCart(int productId)
+        {
+            Product product = _context.Products.First(x => x.Id == productId);
+            CartHelper.AddToCart(product, this.HttpContext);
+
+            //Products = _context.Products.ToList();
+            return Page();
         }
     }
 }
