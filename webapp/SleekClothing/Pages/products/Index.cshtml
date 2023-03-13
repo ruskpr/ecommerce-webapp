@@ -1,0 +1,153 @@
+﻿@page
+@model SleekClothing.Pages.products.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="text-center bg-primary text-lg-start text-white text-muted mt-0">
+    <!-- Section: Links  -->
+    <section class="text-white">
+        <div class="container text-center text-md-start pt-4 pb-4">
+           <h2>Search for products</h2>
+           <form>
+                <div class="input-group m-3">
+                    <div class="form-outline">
+                        <input type="search" id="form1" class="form-control" placeholder="Tops... Hoodies.."/>
+                    </div>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+           </form>
+        </div>
+    </section>
+    <!-- Section: Links  -->
+
+    
+</div>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Desc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].SKU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].DateCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Products) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Desc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SKU)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@* Product cards *@
+<section>
+    <div method="post" class="container my-5">
+        <header class="mb-4">
+            <h3>All Products</h3>
+        </header>
+
+        <form method="post" class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
+                    <div class="card border-0 w-100 my-2 shadow-2-strong">
+                        @* Card Image *@
+                        <img src="@product.ImageLocation" class="card-img-top pb-2" style="aspect-ratio: 1 / 1" />
+                        <div class=" d-flex flex-column">
+                            @* Card Content *@
+                            <h5 class="card-title">@product.Name</h5>
+                            @if (product.IsOutOfStock)
+                            {
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                                <p class="text-info mb-0 fw-bold">SOLD OUT</p>
+
+                            }
+                            else if (product.HasDiscount)
+                            {
+                                <p class="text-success fw-bold mb-0">@product.Discount% OFF</p>
+                                <span class="text-decoration-line-through">
+                                    @product.Price.ToString("c2")
+                                </span>
+                                <span class="text-decoration-none fw-bold">
+                                    @product.PriceAfterDiscount.ToString("c2")
+                                </span>
+                            }
+                            else // show price like normal if no other conditions met
+                            {
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                            }
+                            @* Cart Actions *@
+                            <div class="border-0 d-flex gap-1 h-auto align-items-center py-2 px-0 pb-0 mt-auto">
+                                <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./Details" asp-route-id="@product.Id">Details</a>
+                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
+                                <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </form>
+        
+        <div class="d-flex justify-content-center m-4">
+            <a href="/products" class="btn btn-primary border px-2 pt-2 mx-1 icon-hover">Show More</a>
+        </div>
+    </div>
+</section>

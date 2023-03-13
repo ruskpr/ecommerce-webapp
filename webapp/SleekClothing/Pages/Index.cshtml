@@ -1,0 +1,172 @@
+﻿@page
+@model SleekClothing.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+@* Jumbotron *@
+<div class="bg-primary container-fluid text-white py-5">
+    <div class="container py-5">
+        <h1>
+            Best products & <br />
+            brands in our store
+        </h1>
+        <p>
+            Trendy Products, Factory Prices, Excellent Service
+        </p>
+        <button type="button" class="btn btn-outline-light">
+            Learn more
+        </button>
+        <button type="button" class="btn btn-light shadow-0 text-primary pt-2 border border-white">
+            <span class="pt-1">Purchase now</span>
+        </button>
+    </div>
+
+
+</div>
+
+@* Products grid list *@
+<section>
+    <div class="container my-5">
+        <header class="mb-4">
+            <h3>New Arrivals</h3>
+        </header>
+
+        <form method="post" class="row">
+            @foreach (var product in Model.NewestProducts)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
+                    <div class="card border-0 w-100 my-2 shadow-2-strong">
+                        @* Card Image *@
+                        <img src="@product.ImageLocation" class="card-img-top pb-2" style="aspect-ratio: 1 / 1" />
+                        <div class=" d-flex flex-column">
+                            @* Card Content *@
+                            <h5 class="card-title">@product.Name</h5>
+                            @if (product.IsOutOfStock)
+                            {
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                                <p class="text-info mb-0 fw-bold">SOLD OUT</p>
+                            }
+                            else if (product.HasDiscount)
+                            {
+                                <p class="text-success fw-bold mb-0">@product.Discount% OFF</p>
+                                <span class="text-decoration-line-through">
+                                    @product.Price.ToString("c2")
+                                </span>
+                                <span class="text-decoration-none fw-bold">
+                                    @product.PriceAfterDiscount.ToString("c2")
+                                </span>
+                            }
+                            else // show price like normal if no other conditions met
+                            {
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                            }
+                            @* Cart Actions *@
+                            <div class="border-0 d-flex gap-1 h-auto align-items-center py-2 px-0 pb-0 mt-auto">
+                                <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./products/Details" asp-route-id="@product.Id">Details</a>
+                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
+                                <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </form>
+
+        <div class="d-flex justify-content-center m-4">
+            <a href="/products" class="btn btn-primary shadow-0 me-1 ">View all products</a>
+        </div>
+    </div>
+</section>
+
+@* Why choose us section *@
+<section class="mt-5" style="background-color: #f5f5f5;">
+    <div class="container text-dark pt-3">
+        <header class="pt-4 pb-3">
+            <h3>Why choose us</h3>
+        </header>
+
+        <div class="row mb-4">
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-camera-retro fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Reasonable prices</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-star fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Best quality</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-plane fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Worldwide shipping</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-users fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Customer satisfaction</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-thumbs-up fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Happy customers</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+            <div class="col-lg-4 col-md-6">
+                <figure class="d-flex align-items-center mb-4">
+                    <span class="rounded-circle bg-white p-3 d-flex me-2 mb-2">
+                        <i class="fas fa-box fa-2x fa-fw text-primary floating"></i>
+                    </span>
+                    <figcaption class="info">
+                        <h6 class="title">Thousand items</h6>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmor</p>
+                    </figcaption>
+                </figure>
+                <!-- itemside // -->
+            </div>
+            <!-- col // -->
+        </div>
+    </div>
+    <!-- container end.// -->
+</section>

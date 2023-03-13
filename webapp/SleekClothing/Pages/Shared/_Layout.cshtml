@@ -1,0 +1,251 @@
+﻿@* CODE *@
+@using Helpers
+@{
+    List<Models.Product> products = CartHelper.GetGroupedCartItems(this.Context.Request);
+
+    
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sleek Clothing</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SleekEcommerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <!-- Jumbotron -->
+        <div class="py-2 text-center bg-white border-bottom">
+            <div class="container">
+                <div class="row gy-3">
+                    <!-- Left elements -->
+                    <div class="col-lg-2 col-sm-6 col-md-3 col-6 d-flex align-baseline d-none d-sm-block ">
+                        <a href="/" class="float-start navbar-brand text-nowrap">
+                            Sleek Clothing Co.
+                        </a>
+                    </div>
+                    <!-- Left elements -->
+                    <!-- Center elements -->
+                    <div class="col-lg-8 col-md-6 col-8 d-none d-md-block">
+                        <form class="input-group  float-center d-flex justify-content-center align-items-start">
+                            <div class="form-outline">
+                                <input type="search" placeholder="Search..." id="form1" class="form-control" />
+                            </div>
+                            <button type="button" class="btn btn-primary shadow-0">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <!-- Center elements -->
+                    <!-- Right elements -->
+                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-12">
+                        <div class="d-flex float-end">
+                            <partial name="_LoginPartial" />
+                            <button data-bs-toggle="offcanvas" 
+                                data-bs-target="#offcanvasScrolling" 
+                                class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
+                                <i class="fas fa-cart-shopping m-1 me-md-2"></i>
+                                
+                                @if (CartHelper.GetCartItemsCount(this.Context) > 0)
+                                {
+                                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                        @CartHelper.GetCartItemsCount(this.Context)
+                                   </span> 
+                                }
+                                
+                            </button>
+                            
+                        </div>
+                    </div>
+                    <!-- Right elements -->
+                </div>
+            </div>
+        </div>
+        <!-- Jumbotron -->
+        <!-- Lower Navbar -->
+        <div class="border-bottom">
+            <nav class="container navbar navbar-expand-lg navbar-light bg-white">
+                <!-- Container wrapper -->
+                <ul class="d-flex flex-row navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="/products">All Products</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Deals</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Tops</a>
+                    </li>
+                    <li class="px-3 nav-item">
+                        <a class="nav-link text-dark" href="#">Bottoms</a>
+                    </li>
+
+                </ul>
+                <!-- Container wrapper -->
+            </nav>
+        </div>
+        <!-- Lower Navbar -->
+    </header>
+
+    @* BODY CONTENT *@
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Sidebar (Offcanvas) -->
+     <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+             @* Header *@   
+             <div class="offcanvas-header mx-4">
+                <h5 class="offcanvas-title fs-3" id="offcanvasScrollingLabel">My items</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            @* Content *@
+            <div class="offcanvas-body">
+                @* Render cart items here *@
+            @foreach (var product in products) 
+            {
+               <div class="card m-4" style="max-width: 540px;">
+                  <div class="row g-0">
+                    <div class="col">
+                      <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
+                    </div>
+                    <div class="col-9">
+                      <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                      </div>
+                    </div>
+                  </div>
+                    @if (product.CartQuantity > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
+                            @product.CartQuantity
+                        </span>
+                    }
+
+                </div>
+
+            }
+            @if (products.Count == 0)
+            {
+                <p class="fw-light fs-4 mx-4">No items in your cart</p>
+                <span class="fs-6 mx-4"><a href="/products">View products</a></span>
+            } else
+            {
+                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotal(this.Context.Request).ToString("c2")</p>
+                <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+                <span class="fs-6"><a href="/cart">View full cart</a></span>
+            }
+            
+
+            </div>
+        </div>
+
+    <footer class="text-center text-lg-start text-muted mt-3" style="background-color: #f5f5f5;">
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start pt-4 pb-4">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-12 col-lg-3 col-sm-12 mb-2">
+                        <!-- Content -->
+                        
+                        <p class="mt-2 text-dark">
+                            © 2023 Sleek Clothing 
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-dark fw-bold mb-2">
+                            Store
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-muted" href="/">Home</a></li>
+                            <li><a class="text-muted" href="/products">All Products</a></li>
+                            <li><a class="text-muted" href="/categories">Categories</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-dark fw-bold mb-2">
+                            Information
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-muted" href="/">Newsletter</a></li>
+                            <li><a class="text-muted" href="/">Shipping</a></li>
+                            <li><a class="text-muted" href="/">Returns</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-dark fw-bold mb-2">
+                            Support
+                        </h6>
+                        <ul class="list-unstyled mb-4">
+                            <li><a class="text-muted" href="/">FAQ</a></li>
+                            <li><a class="text-muted" href="/">Contact</a></li>
+                            <li><a class="text-muted" href="/">Refunds</a></li>
+                        </ul>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-12 col-sm-12 col-lg-3">
+                        <!-- Links -->
+                        <h6 class="text-uppercase text-dark fw-bold mb-2">Newsletter</h6>
+                        <p class="text-muted">Stay in touch with latest updates about our products and offers</p>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control border" placeholder="Email" aria-label="Email" aria-describedby="button-addon2" />
+                            <button class="btn btn-light border shadow-0" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+                                Join
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <div class="">
+            <div class="container">
+                <div class="d-flex justify-content-between py-4 border-top">
+                    <!--- payment --->
+                    <div>
+                        <i class="fab fa-xl fa-cc-visa text-dark"></i>
+                        <i class="fab fa-xl fa-cc-amex text-dark"></i>
+                        <i class="fab fa-xl fa-cc-mastercard text-dark"></i>
+                        <i class="fab fa-xl fa-cc-paypal text-dark"></i>
+                    </div>
+                    <!--- payment --->
+                    
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer -->
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
