@@ -24,7 +24,7 @@ namespace SleekEcommerce.Pages.products
 
         public string SearchTerm { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             if (_context.Products != null)
             {
@@ -32,6 +32,7 @@ namespace SleekEcommerce.Pages.products
                 Products = await _context.Products.ToListAsync();
                 
             }
+            return Page();
         }
 
 

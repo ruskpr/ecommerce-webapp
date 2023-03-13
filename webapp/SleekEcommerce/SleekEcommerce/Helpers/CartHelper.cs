@@ -18,6 +18,8 @@ namespace SleekEcommerce.Helpers
             { 
                 Expires = DateTime.Now.AddDays(240)
             };
+
+            httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, "", cookieOptions);
             
         }
@@ -40,6 +42,7 @@ namespace SleekEcommerce.Helpers
             var newCookieValue = JsonConvert.SerializeObject(cartItems, Formatting.Indented);
 
             // update cookie
+            httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
@@ -75,23 +78,29 @@ namespace SleekEcommerce.Helpers
                 return new List<Product>(); // return empty list if cookie is null
             }
 
-            var productsFromCookie = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
+            var products = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
 
-            List<Product> products = new List<Product>();
-            for (int i = 0; i < productsFromCookie.Count; i++)
+            // group each unique item into its own list 
+            var group = products
+            .GroupBy(u => u.Id)
+            .Select(grp => grp.ToList())
+            .ToList();
+
+            // loop through each grouped list and add it to the returned list 
+            // with the correct quantity of that unique item
+            List<Product> groupedProducts = new List<Product>();
+            foreach (var list in group)
             {
-                if (products.Where(x => x.Id == productsFromCookie[i].Id).Count() > 0)
-                { 
-                    products.Last().CartQuantity += 1;
-                    continue;
-                }
-
-                products.Add(productsFromCookie[i]);
-                products.Last().CartQuantity += 1;  
+                var product = list[0];
+                product.CartQuantity = list.Count();
+                groupedProducts.Add(product);
+                continue;
             }
 
 
-            return products ?? new List<Product>(); // return empty list if cookie is null
+            
+
+            return groupedProducts ?? new List<Product>(); // return empty list if cookie is null
         }
   
         // total items in cart
@@ -100,12 +109,12 @@ namespace SleekEcommerce.Helpers
             var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
             if (cookieValue == null)
             {
-                return 0; // return 0 if no cart exists
+                return 0; // return 0 if no cart exists from cookie
             }
 
-            var productsFromCookie = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
+            var products = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
             
-            return productsFromCookie.Count();
+            return products.Count();
         }
 
         public static decimal GetCartTotal(HttpRequest httpRequest)
