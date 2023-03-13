@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekEcommerce.Models;
@@ -54,7 +55,10 @@ namespace SleekEcommerce.Helpers
         public static void RemoveFromCart(Product product, HttpContext httpContext)
         {
             // get current items if there are any
-            var cartItems = GetGroupedCartItems(httpContext.Request);
+            var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
+            if (cookieValue.IsNullOrEmpty()) return;
+
+            var cartItems = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
 
             // append to list
             foreach (var item in cartItems)
@@ -73,6 +77,10 @@ namespace SleekEcommerce.Helpers
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
+        public static void DeleteCart(HttpContext httpContext)
+        {
+            httpContext.Response.Cookies.Delete(COOKIE_NAME);
+        }
 
         // get list of one of each item in cart but filtered with the correct quantity
         public static List<Product> GetGroupedCartItems(HttpRequest httpRequest)

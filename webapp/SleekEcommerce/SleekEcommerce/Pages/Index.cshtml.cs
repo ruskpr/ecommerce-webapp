@@ -40,7 +40,7 @@ namespace SleekEcommerce.Pages
             Product product = _context.Products.First(x => x.Id == productId);
             CartHelper.AddToCart(product, this.HttpContext);
 
-            //Products = _context.Products.ToList();
+            Products = _context.Products.ToList();
             return Page();
         }
     }
