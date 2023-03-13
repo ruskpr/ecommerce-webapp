@@ -4,12 +4,14 @@ using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekEcommerce.Models;
 using System;
+using System.Collections.Generic;
+
 namespace SleekEcommerce.Helpers
 {
     public class CartHelper
     {
 
-        const string COOKIE_NAME = "SleekCartData";
+        const string COOKIE_NAME = "SLKCARTDATA";
 
         private static void CreateCart(HttpContext httpContext)
         {
@@ -19,37 +21,40 @@ namespace SleekEcommerce.Helpers
                 Expires = DateTime.Now.AddDays(240)
             };
 
-            httpContext.Response.Cookies.Delete(COOKIE_NAME);
+            //httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, "", cookieOptions);
             
         }
 
-        public static void AddToCart(Product product, HttpContext httpContext)
+        public static void AddToCart(Product newProduct, HttpContext httpContext)
         {
+            List<Product> cartItems = new List<Product>();
             var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
             if (cookieValue == null)
             {
                 CreateCart(httpContext);
             }
+            else
+            {
+                cartItems = JsonConvert.DeserializeObject<List<Product>>(cookieValue);
+            }
 
-            // get current items if there are any
-            var cartItems = GetCartItems(httpContext.Request);
 
             // append to list
-            cartItems.Add(product);
+            cartItems.Add(newProduct);
 
             //serialize to JSON 
             var newCookieValue = JsonConvert.SerializeObject(cartItems, Formatting.Indented);
 
             // update cookie
-            httpContext.Response.Cookies.Delete(COOKIE_NAME);
+            //httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
         public static void RemoveFromCart(Product product, HttpContext httpContext)
         {
             // get current items if there are any
-            var cartItems = GetCartItems(httpContext.Request);
+            var cartItems = GetGroupedCartItems(httpContext.Request);
 
             // append to list
             foreach (var item in cartItems)
@@ -70,7 +75,7 @@ namespace SleekEcommerce.Helpers
 
 
         // get list of one of each item in cart but filtered with the correct quantity
-        public static List<Product> GetCartItems(HttpRequest httpRequest)
+        public static List<Product> GetGroupedCartItems(HttpRequest httpRequest)
         {
             var cookieValue = httpRequest.Cookies[COOKIE_NAME];
             if (cookieValue == null)
@@ -97,9 +102,6 @@ namespace SleekEcommerce.Helpers
                 continue;
             }
 
-
-            
-
             return groupedProducts ?? new List<Product>(); // return empty list if cookie is null
         }
   
@@ -121,7 +123,7 @@ namespace SleekEcommerce.Helpers
         {
             decimal total = 0;
 
-            var items = GetCartItems(httpRequest);
+            var items = GetGroupedCartItems(httpRequest);
 
             foreach (var item in items)
             {

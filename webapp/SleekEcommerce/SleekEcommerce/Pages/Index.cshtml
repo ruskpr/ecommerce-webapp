@@ -64,7 +64,7 @@
                             @* Cart Actions *@
                             <div class="border-0 d-flex gap-1 h-auto align-items-center py-2 px-0 pb-0 mt-auto">
                                 <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./products/Details" asp-route-id="@product.Id">Details</a>
-                                <a asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></a>
+                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
                                 <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
                             </div>
                         </div>

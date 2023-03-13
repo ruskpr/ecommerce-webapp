@@ -2,7 +2,7 @@
 @using SleekEcommerce.Helpers;
 @model SleekEcommerce.Pages.cart.IndexModel
 @{
-    List<Models.Product> products = CartHelper.GetCartItems(Model.HttpContext.Request);
+    List<Models.Product> products = CartHelper.GetGroupedCartItems(Model.HttpContext.Request);
 }
 
 @foreach (var product in products)
