@@ -28,17 +28,13 @@ namespace SleekClothing.Pages
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
-            {
-
                 Products = await _context.Products.ToListAsync();
-
-            }
         }
 
         public IActionResult OnPostAddToCart(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
-            CartHelper.AddToCart(product, this.HttpContext);
+            CartHelper.AddToCartDb(product, _context, this.User);
 
             Products = _context.Products.ToList();
             return Page();

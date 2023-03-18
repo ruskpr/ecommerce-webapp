@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
+using SleekClothing.Data;
 using SleekClothing.Models;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace SleekClothing.Helpers
 {
@@ -14,7 +16,9 @@ namespace SleekClothing.Helpers
 
         const string COOKIE_NAME = "SLKCARTDATA";
 
-        private static void CreateCart(HttpContext httpContext)
+        #region cookie logic
+
+        private static void CreateCartCookie(HttpContext httpContext)
         {
             // create cookie
             var cookieOptions = new CookieOptions
@@ -27,13 +31,13 @@ namespace SleekClothing.Helpers
             
         }
 
-        public static void AddToCart(Product newProduct, HttpContext httpContext)
+        public static void AddToCartCookie(Product newProduct, HttpContext httpContext)
         {
             List<Product> cartItems = new List<Product>();
             var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
             if (cookieValue == null)
             {
-                CreateCart(httpContext);
+                CreateCartCookie(httpContext);
             }
             else
             {
@@ -50,9 +54,9 @@ namespace SleekClothing.Helpers
             // update cookie
             //httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
-        }
+        }       
 
-        public static void RemoveFromCart(Product product, HttpContext httpContext)
+        public static void RemoveFromCartCookie(Product product, HttpContext httpContext)
         {
             // get current items if there are any
             var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
@@ -77,13 +81,13 @@ namespace SleekClothing.Helpers
             httpContext.Response.Cookies.Append(COOKIE_NAME, newCookieValue);
         }
 
-        public static void DeleteCart(HttpContext httpContext)
+        public static void DeleteCartCookie(HttpContext httpContext)
         {
             httpContext.Response.Cookies.Delete(COOKIE_NAME);
         }
 
         // get list of one of each item in cart but filtered with the correct quantity
-        public static List<Product> GetGroupedCartItems(HttpRequest httpRequest)
+        public static List<Product> GetGroupedCartItemsCookie(HttpRequest httpRequest)
         {
             var cookieValue = httpRequest.Cookies[COOKIE_NAME];
             if (cookieValue == null)
@@ -114,7 +118,7 @@ namespace SleekClothing.Helpers
         }
   
         // total items in cart
-        public static int GetCartItemsCount(HttpContext httpContext)
+        public static int GetCartItemsCountCookie(HttpContext httpContext)
         {
             var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
             if (cookieValue == null)
@@ -127,11 +131,11 @@ namespace SleekClothing.Helpers
             return products.Count();
         }
 
-        public static decimal GetCartTotal(HttpRequest httpRequest)
+        public static decimal GetCartTotalCookie(HttpRequest httpRequest)
         {
             decimal total = 0;
 
-            var items = GetGroupedCartItems(httpRequest);
+            var items = GetGroupedCartItemsCookie(httpRequest);
 
             foreach (var item in items)
             {
@@ -140,5 +144,131 @@ namespace SleekClothing.Helpers
 
             return total;
         }
+
+        #endregion
+
+        #region db
+
+        public static void AddToCartDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
+        {
+            if (userClaim == null && context == null) { return; }
+            var user = UsersHelper.GetUser(context, userClaim);
+            // 1. get users existing cart
+            List<Product> updatedCart = GetUserCartDb(user.Id, context);
+
+            // 2. add new product to cart
+            updatedCart.Add(product);
+
+            // 3. update users cart
+            var cart = context.UserCarts.FirstOrDefault(c => c.UserId == user.Id);
+
+            if (cart != null)
+            {
+                cart.UserId = user.Id;
+                cart.CartDataJSON = JsonConvert.SerializeObject(updatedCart, Formatting.Indented);
+            }
+            else
+            {
+                context.UserCarts.Add(new UserCart()
+                {
+                    UserId = user.Id,
+                    CartDataJSON = JsonConvert.SerializeObject(updatedCart, Formatting.Indented),
+                });
+            }
+
+
+            // 4. save changes
+            context.SaveChanges();
+        }
+
+        public static List<Product> GetUserCartDb(string userid, ApplicationDbContext context)
+        {
+            List<Product> products = new List<Product>();
+
+            var cartJson = "";
+            try
+            {
+                cartJson = context.UserCarts.Where(x => x.UserId == userid).First().CartDataJSON;
+            }
+            catch (Exception)
+            {
+                return new List<Product>();
+                throw;
+            }
+
+            products = JsonConvert.DeserializeObject<List<Product>>(cartJson);
+
+            return products;
+        }
+
+        // get list of one of each item in cart but filtered with the correct quantity
+        public static List<Product> GetGroupedCartItemsDb(string userid, ApplicationDbContext context)
+        {
+            string cartJson = context.UserCarts.Where(x => x.UserId == userid).First().CartDataJSON;
+
+
+            var products = JsonConvert.DeserializeObject<List<Product>>(cartJson);
+
+            // group each unique item into its own list 
+            var group = products
+            .GroupBy(u => u.Id)
+            .Select(grp => grp.ToList())
+            .ToList();
+
+            // loop through each grouped list and add it to the returned list 
+            // with the correct quantity of that unique item
+            List<Product> groupedProducts = new List<Product>();
+            foreach (var list in group)
+            {
+                var product = list[0];
+                product.CartQuantity = list.Count();
+                groupedProducts.Add(product);
+            }
+
+            return groupedProducts ?? new List<Product>(); // return empty list if cookie is null
+        }
+
+        // total items in cart
+        public static int GetCartItemsCountDb(string userid, ApplicationDbContext context)
+        {
+            var cart = context.UserCarts.Where(x => x.UserId == userid).First();
+
+            if (cart == null)
+            {
+                return 0;
+            }
+
+            var products = JsonConvert.DeserializeObject<List<Product>>(cart.CartDataJSON);
+
+            return products.Count();
+        }
+
+        public static void DeleteProductFromCart(string userid, Product product, ApplicationDbContext context)
+        {
+            var userCart = context.UserCarts.Where(x => x.UserId == userid).First();
+
+            if (userCart == null) return;
+
+            var cart = JsonConvert.DeserializeObject<List<Product>>(userCart.CartDataJSON);
+
+            cart.Remove(product);
+
+            context.SaveChanges();            
+        }
+
+        public static decimal GetCartTotalDb(string userid, ApplicationDbContext context)
+        {
+            decimal total = 0;
+
+            var items = GetGroupedCartItemsDb(userid, context);
+
+            foreach (var item in items)
+            {
+                total += item.PriceAfterDiscount * item.CartQuantity;
+            }
+
+            return total;
+        }
+        #endregion
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +32,8 @@ namespace SleekClothing.Pages.products
             {
 
                 Products = await _context.Products.ToListAsync();
-                
+
+
             }
         }
 
@@ -38,7 +41,9 @@ namespace SleekClothing.Pages.products
         public IActionResult OnPostAddToCart(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
-            CartHelper.AddToCart(product, this.HttpContext);
+
+            var u = UsersHelper.GetUser(_context, this.User);
+            CartHelper.AddToCartDb(product, _context, User);
 
             Products = _context.Products.ToList();
             return Page();

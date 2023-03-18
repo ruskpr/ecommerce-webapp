@@ -1,9 +1,16 @@
 ﻿@* CODE *@
 @using Helpers
+@using Microsoft.EntityFrameworkCore;
+@using SleekClothing.Data;
+@using System.Configuration;
 @{
-    List<Models.Product> products = CartHelper.GetGroupedCartItems(this.Context.Request);
+    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+    optionsBuilder.UseSqlServer("server=localhost,1434;database=SleekDB;user id=sa;password=P@ssword!;encrypt=false;");
+    var context = new ApplicationDbContext(optionsBuilder.Options);
 
-    
+    var user = UsersHelper.GetUser(context, User);
+    List<Models.Product> products = CartHelper.GetGroupedCartItemsDb(user.Id, context);
+
 }
 
 <!DOCTYPE html>
@@ -43,7 +50,7 @@
                     </div>
                     <!-- Center elements -->
                     <!-- Right elements -->
-                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-12">
+                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-12 border">
                         <div class="d-flex float-end">
                             <partial name="_LoginPartial" />
                             <button data-bs-toggle="offcanvas" 
@@ -51,10 +58,10 @@
                                 class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
                                 <i class="fas fa-cart-shopping m-1 me-md-2"></i>
                                 
-                                @if (CartHelper.GetCartItemsCount(this.Context) > 0)
+                                @if (CartHelper.GetCartItemsCountDb(user.Id, context) > 0)
                                 {
                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                        @CartHelper.GetCartItemsCount(this.Context)
+                                        @CartHelper.GetCartItemsCountDb(user.Id, context)
                                    </span> 
                                 }
                                 
@@ -142,7 +149,7 @@
                 <span class="fs-6 mx-4"><a href="/products">View products</a></span>
             } else
             {
-                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotal(this.Context.Request).ToString("c2")</p>
+                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
                 <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
                 <span class="fs-6"><a href="/cart">View full cart</a></span>
             }

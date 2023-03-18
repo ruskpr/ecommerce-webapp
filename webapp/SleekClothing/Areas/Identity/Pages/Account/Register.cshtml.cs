@@ -130,7 +130,7 @@ namespace SleekClothing.Areas.Identity.Pages.Account
                     if (!await _roleManager.RoleExistsAsync("User"))
                         await _roleManager.CreateAsync(new IdentityRole("User"));
 
-                    await _userManager.AddToRoleAsync(user, "Admin");
+                    await _userManager.AddToRoleAsync(user, "User");
 
 
                     _logger.LogInformation("User created a new account with password.");

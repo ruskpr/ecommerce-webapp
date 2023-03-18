@@ -24,6 +24,8 @@ namespace SleekClothing.Models
 
         [Column(TypeName = "varchar(500)")] public string ImageLocation { get; set; }
 
+
+
         #region not included in EF migrations
 
         [NotMapped]

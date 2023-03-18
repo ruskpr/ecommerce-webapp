@@ -2,10 +2,10 @@
 @using SleekClothing.Helpers;
 @model SleekClothing.Pages.cart.IndexModel;
 @{
-    List<Models.Product> products = CartHelper.GetGroupedCartItems(Model.HttpContext.Request);
+    ViewData["Title"] = "Cart";
 }
 
-@foreach (var product in products)
+@foreach (var product in Model.Products)
 {
     <div class="card m-4" >
         <div class="row g-0">
@@ -15,7 +15,22 @@
             <div class="col-9">
                 <div class="card-body">
                     <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text my-2">Quantity: @product.CartQuantity</p>
+                    <div class="d-flex">
+                        <p class="card-text my-2">Quantity: @product.CartQuantity</p>
+                        <button asp-page-handler="RemoveFromCart" 
+                        asp-route-productId="@product.Id" 
+                        class="btn btn-outline-danger border mx-3 px-2 pt-2
+                        icon-hover">
+                            <i class="fas fa-minus fa-lg text-white px-1"></i>
+                        </button>
+                        <button asp-page-handler="AddToCart"
+                            asp-route-productId="@product.Id"
+                                class="btn btn-outline-success border px-2 pt-2
+                        icon-hover">
+                            <i class="fas fa-plus fa-lg text-white px-1"></i>
+                        </button>
+                    </div>
+
                     <p class="card-text my-2">Category: @product.Category.Name</p>
                     @if (product.HasDiscount)
                     {
@@ -33,9 +48,10 @@
             </span>
         }
 
+
     </div>
 
 }
-<p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotal(Model.HttpContext.Request).ToString("c2")</p>
+<p class="fw-light fs-4 mx-4">Total @Model.CartTotal</p>
 <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
 <span class="fs-6"><a href="/products">Browse products</a></span>
