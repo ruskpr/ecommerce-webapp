@@ -1,2 +1,2 @@
-# sleek-ecommerce-webapp
-Clothing store web application build with C#, ASP.NET, SQL Server, and Entity Framework Core
+# Sleek Ecommerce
+Clothing store web application built with C#, ASP.NET (Razor Pages), SQL Server, and Entity Framework Core
