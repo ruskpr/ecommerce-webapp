@@ -1,12 +1,15 @@
 ﻿@page
+@using Microsoft.AspNetCore.Identity;
 @using SleekClothing.Helpers;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @model SleekClothing.Pages.cart.IndexModel;
 @{
     ViewData["Title"] = "Cart";
 }
 
 @* if there are items in the user's cart, show cart details *@
-@if (Model.Products.Count > 0)
+@if (SignInManager.IsSignedIn(User) && Model.Products.Count > 0)
 {
     @foreach (var product in Model.Products)
     {
@@ -59,11 +62,17 @@
     <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
     <span class="fs-6"><a href="/products">Browse products</a></span>
 }
-else
+else if (SignInManager.IsSignedIn(User) && Model.Products.Count == 0)
 {
     <div class="d-flex flex-column align-items-center justify-content-center align my-5">
         <h1 class="text-white-50">¯\_(ツ)_/¯</h1>
         <h1>You have no items in your cart</h1>
         <a href="/products">Click here to browse our products</a>
     </div>
+}
+else
+{
+    <div style="padding: 100px 0px;">
+        <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to view your cart.</span>
+    </div>    
 }

@@ -1,15 +1,29 @@
 ﻿@* CODE *@
 @using Helpers
+@using Microsoft.AspNetCore.Identity;
 @using Microsoft.EntityFrameworkCore;
 @using SleekClothing.Data;
 @using System.Configuration;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @{
     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
     optionsBuilder.UseSqlServer("server=localhost,1434;database=SleekDB;user id=sa;password=P@ssword!;encrypt=false;");
     var context = new ApplicationDbContext(optionsBuilder.Options);
 
-    var user = UsersHelper.GetUser(context, User);
-    List<Models.Product> products = CartHelper.GetGroupedCartItemsDb(user.Id, context);
+    IdentityUser? user = null;
+    List<Models.Product> products = new List<Models.Product>();
+    if (SignInManager.IsSignedIn(User))
+    {
+        user = UsersHelper.GetUser(context, User);
+        products = CartHelper.GetGroupedCartItemsDb(user.Id, context);
+    }
+    else
+    {
+        products = new List<Models.Product>();
+    }
+    
 
 }
 
@@ -58,12 +72,15 @@
                                 class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
                                 <i class="fas fa-cart-shopping m-1 me-md-2"></i>
                                 
-                                @if (CartHelper.GetCartItemsCountDb(user.Id, context) > 0)
+                                @if (SignInManager.IsSignedIn(User))
                                 {
-                                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                        @CartHelper.GetCartItemsCountDb(user.Id, context)
-                                   </span> 
-                                }
+                                    @if (CartHelper.GetCartItemsCountDb(user.Id, context) > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                            @CartHelper.GetCartItemsCountDb(user.Id, context)
+                                        </span>
+                                    }
+                                }                            
                                 
                             </button>
                             
@@ -126,42 +143,49 @@
             @* Content *@
             <div class="offcanvas-body">
                 @* Render cart items here *@
-            @foreach (var product in products) 
+            @if (!SignInManager.IsSignedIn(User))
             {
-               <div class="card m-4" style="max-width: 540px;">
-                  <div class="row g-0">
-                    <div class="col">
-                      <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
-                    </div>
-                    <div class="col-9">
-                      <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                            <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
-                      </div>
-                    </div>
-                  </div>
-                    @if (product.CartQuantity > 0)
-                    {
-                        <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
-                            @product.CartQuantity
-                        </span>
-                    }
-
-                </div>
-
+                <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to see your items</span>
             }
-            @if (products.Count == 0)
+            else
             {
-                <p class="fw-light fs-4 mx-4">No items in your cart</p>
-                <span class="fs-6 mx-4"><a href="/products">View products</a></span>
-            } else
-            {
-                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
-                <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
-                <span class="fs-6"><a href="/cart">View full cart</a></span>
+                @foreach (var product in products)
+                {
+                    <div class="card m-4" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col">
+                                <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
+                            </div>
+                            <div class="col-9">
+                                <div class="card-body">
+                                    <h5 class="card-title">@product.Name</h5>
+                                    <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if (product.CartQuantity > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
+                                @product.CartQuantity
+                            </span>
+                        }
+
+                    </div>
+
+                }
+                @if (products.Count == 0)
+                {
+                    <p class="fw-light fs-4 mx-4">No items in your cart</p>
+                    <span class="fs-6 mx-4"><a href="/products">View products</a></span>
+                }
+                else
+                {
+                    <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
+                    <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+                    <span class="fs-6"><a href="/cart">View full cart</a></span>
+                }
             }
             
-
             </div>
         </div>
 

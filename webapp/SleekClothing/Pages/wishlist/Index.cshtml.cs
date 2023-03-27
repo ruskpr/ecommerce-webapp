@@ -26,21 +26,21 @@ namespace SleekClothing.Pages.wishlist
 
         public async Task OnGetAsync()
         {
-            var user = UsersHelper.GetUser(_context, this.User);
-            CartTotal = CartHelper.GetCartTotalDb(user.Id, _context).ToString("c2");
-
-
-            //if (_context.Products != null)
-            //    Products = await _context.Products.ToListAsync();
-
-            if (_context != null)
+            if (User.Identity.IsAuthenticated)
             {
-                ProductWishlist = await Task.Run(() => CartHelper.GetGroupedCartItemsDb(user.Id, _context));
+                var user = UsersHelper.GetUser(_context, this.User);
+                CartTotal = CartHelper.GetCartTotalDb(user.Id, _context).ToString("c2");
+
+                if (_context != null)
+                {
+                    ProductWishlist = await Task.Run(() => WishlistHelper.GetUserWishlistDb(User, _context));
+                }
             }
+                
 
         }
 
-        public IActionResult OnPostAddToCart(int productId)
+        public IActionResult OnPostAddToWishlist(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
             CartHelper.AddToCartDb(product, _context, this.User);
@@ -49,7 +49,7 @@ namespace SleekClothing.Pages.wishlist
             return Redirect("/cart");
         }
 
-        public IActionResult OnPostRemoveFromCart(int productId)
+        public IActionResult OnPostRemoveFromWishlist(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
             CartHelper.RemoveFromCartDb(product, _context, this.User);

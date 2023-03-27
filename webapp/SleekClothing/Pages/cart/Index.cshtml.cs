@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ namespace SleekClothing.Pages.cart
     public class IndexModel : PageModel
     {
         private readonly SleekClothing.Data.ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
         public ApplicationDbContext Context { get; set; }
 
@@ -26,18 +29,16 @@ namespace SleekClothing.Pages.cart
 
         public async Task OnGetAsync()
         {
-            var user = UsersHelper.GetUser(_context, this.User);
-            CartTotal = CartHelper.GetCartTotalDb(user.Id, _context).ToString("c2");
-
-
-            //if (_context.Products != null)
-            //    Products = await _context.Products.ToListAsync();
-
-            if (_context != null)
+            if (User.Identity.IsAuthenticated)
             {
-                Products = await Task.Run(() => CartHelper.GetGroupedCartItemsDb(user.Id, _context));
-            }
+                var user = UsersHelper.GetUser(_context, this.User);
+                CartTotal = CartHelper.GetCartTotalDb(user.Id, _context).ToString("c2");
 
+                if (_context != null)
+                {
+                    Products = await Task.Run(() => CartHelper.GetGroupedCartItemsDb(user.Id, _context));
+                }
+            }          
         }
 
         public IActionResult OnPostAddToCart(int productId)
