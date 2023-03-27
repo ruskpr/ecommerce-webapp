@@ -5,7 +5,7 @@ using SleekClothing.Data;
 using SleekClothing.Helpers;
 using SleekClothing.Models;
 
-namespace SleekClothing.Pages.cart
+namespace SleekClothing.Pages.wishlist
 {
     public class IndexModel : PageModel
     {
@@ -21,7 +21,7 @@ namespace SleekClothing.Pages.cart
 
         }
 
-        public IList<Product> Products { get; set; } = default!;
+        public IList<Product> ProductWishlist { get; set; } = default!;
         
 
         public async Task OnGetAsync()
@@ -35,7 +35,7 @@ namespace SleekClothing.Pages.cart
 
             if (_context != null)
             {
-                Products = await Task.Run(() => CartHelper.GetGroupedCartItemsDb(user.Id, _context));
+                ProductWishlist = await Task.Run(() => CartHelper.GetGroupedCartItemsDb(user.Id, _context));
             }
 
         }

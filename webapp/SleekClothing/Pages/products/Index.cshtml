@@ -10,7 +10,7 @@
     <section class="text-white">
         <div class="container text-center text-md-start pt-4 pb-4">
            <h2>Search for products</h2>
-           <form>
+           <div>
                 <div class="input-group m-3">
                     <div class="form-outline">
                         <input type="search" id="form1" class="form-control" placeholder="Tops... Hoodies.."/>
@@ -19,7 +19,7 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
-           </form>
+           </div>
         </div>
     </section>
     <!-- Section: Links  -->
@@ -103,48 +103,53 @@
             <h3>All Products</h3>
         </header>
 
-        <form method="post" class="row">
+        <div class="row">
             @foreach (var product in Model.Products)
             {
                 <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-                    <div class="card border-0 w-100 my-2 shadow-2-strong">
+                    <div class="card w-100 border-0 my-2 shadow-2-strong">
                         @* Card Image *@
-                        <img src="@product.ImageLocation" class="card-img-top pb-2" style="aspect-ratio: 1 / 1" />
-                        <div class=" d-flex flex-column">
+                        <img src="@product.ImageLocation" class="card-image position-relative card-img-top pb-2" style="aspect-ratio: 1 / 1">
+                        @* buttons *@
+                        <div class="card-buttons position-absolute w-100" style="top: 125px;">
+                            <form method="post" class="d-flex gap-1 h-auto align-items-center justify-content-center bg-white border-0 py-2">
+                                <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./Details" asp-route-id="@product.Id">Details</a>
+                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
+                                <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                            </form>
+                        </div>
+                        <img>
+                        <div class="d-flex flex-column h-100">
                             @* Card Content *@
                             <h5 class="card-title">@product.Name</h5>
-                            @if (product.IsOutOfStock)
-                            {
-                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
-                                <p class="text-info mb-0 fw-bold">SOLD OUT</p>
-
-                            }
-                            else if (product.HasDiscount)
+                            @if (product.HasDiscount)
                             {
                                 <p class="text-success fw-bold mb-0">@product.Discount% OFF</p>
+                                <div class="d-flex gap-2">
+
                                 <span class="text-decoration-line-through">
                                     @product.Price.ToString("c2")
                                 </span>
                                 <span class="text-decoration-none fw-bold">
                                     @product.PriceAfterDiscount.ToString("c2")
                                 </span>
+                                </div>
                             }
-                            else // show price like normal if no other conditions met
+                            @if (product.IsOutOfStock)
+                            {
+                                <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
+
+                            }
+                            @if (!product.IsOutOfStock && !product.HasDiscount) // show price like normal if no other conditions met
                             {
                                 <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
                             }
-                            @* Cart Actions *@
-                            <div class="border-0 d-flex gap-1 h-auto align-items-center py-2 px-0 pb-0 mt-auto">
-                                <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./Details" asp-route-id="@product.Id">Details</a>
-                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
-                                <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-                            </div>
                         </div>
                     </div>
                 </div>
             }
 
-        </form>
+        </div>
         
         <div class="d-flex justify-content-center m-4">
             <a href="/products" class="btn btn-primary border px-2 pt-2 mx-1 icon-hover">Show More</a>

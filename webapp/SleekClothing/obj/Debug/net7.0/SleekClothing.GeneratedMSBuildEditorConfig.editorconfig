@@ -120,6 +120,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekClothing/Pages/wishlist/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcd2lzaGxpc3RcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/russ/repos/sleek-ecommerce-webapp/webapp/SleekClothing/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

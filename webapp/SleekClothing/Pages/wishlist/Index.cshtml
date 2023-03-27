@@ -1,14 +1,14 @@
 ﻿@page
 @using SleekClothing.Helpers;
-@model SleekClothing.Pages.cart.IndexModel;
+@model SleekClothing.Pages.wishlist.IndexModel;
 @{
-    ViewData["Title"] = "Cart";
+    ViewData["Title"] = "Wishlist";
 }
 
 @* if there are items in the user's cart, show cart details *@
-@if (Model.Products.Count > 0)
+@if (Model.ProductWishlist.Count > 0)
 {
-    @foreach (var product in Model.Products)
+    @foreach (var product in Model.ProductWishlist)
     {
         <div class="card m-4" >
             <div class="row g-0">

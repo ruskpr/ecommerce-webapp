@@ -181,6 +181,41 @@ namespace SleekClothing.Helpers
             context.SaveChanges();
         }
 
+        public static void RemoveFromCartDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
+        {
+            if (userClaim == null && context == null) { return; }
+            var user = UsersHelper.GetUser(context, userClaim);
+
+            var userCart = context.UserCarts.Where(x => x.UserId == user.Id).First();
+
+            if (userCart == null) return;
+
+            var productsList = JsonConvert.DeserializeObject<List<Product>>(userCart.CartDataJSON);
+
+            if (productsList != null)
+            {
+                foreach (var item in productsList)
+                {
+                    if (item.Id == product.Id)
+                    {
+                        productsList.Remove(item);
+                        break;
+                    }
+                }
+
+                string newCartJson = JsonConvert.SerializeObject(productsList, Formatting.Indented);
+
+                //userCart.UserId = user.Id;
+                userCart.CartDataJSON = newCartJson;
+            }
+            else
+            {
+                return;
+            }
+
+            context.SaveChanges();
+        }
+
         public static List<Product> GetUserCartDb(string userid, ApplicationDbContext context)
         {
             List<Product> products = new List<Product>();
@@ -205,7 +240,6 @@ namespace SleekClothing.Helpers
         public static List<Product> GetGroupedCartItemsDb(string userid, ApplicationDbContext context)
         {
             string cartJson = context.UserCarts.Where(x => x.UserId == userid).First().CartDataJSON;
-
 
             var products = JsonConvert.DeserializeObject<List<Product>>(cartJson);
 
@@ -243,19 +277,6 @@ namespace SleekClothing.Helpers
             return products.Count();
         }
 
-        public static void DeleteProductFromCart(string userid, Product product, ApplicationDbContext context)
-        {
-            var userCart = context.UserCarts.Where(x => x.UserId == userid).First();
-
-            if (userCart == null) return;
-
-            var cart = JsonConvert.DeserializeObject<List<Product>>(userCart.CartDataJSON);
-
-            cart.Remove(product);
-
-            context.SaveChanges();            
-        }
-
         public static decimal GetCartTotalDb(string userid, ApplicationDbContext context)
         {
             decimal total = 0;
@@ -269,6 +290,7 @@ namespace SleekClothing.Helpers
 
             return total;
         }
+
         #endregion
     }
 }

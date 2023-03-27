@@ -16,3 +16,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+/*custom css*/
+
+.card-buttons {
+    opacity: 0;
+    transition: ease-in-out opacity 0.2s;
+}
+
+.card-image:hover + .card-buttons,
+.card-buttons:hover {
+    opacity: 1;
+}
