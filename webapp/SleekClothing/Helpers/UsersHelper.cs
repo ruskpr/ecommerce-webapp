@@ -10,8 +10,6 @@ namespace SleekClothing.Helpers
     {
         public static IdentityUser GetUser(ApplicationDbContext context, ClaimsPrincipal user)
         {
-            
-
             var userid = user.Identities.First().Claims.First().Value;
              
             return context.Users.FirstOrDefault(x => x.Id == userid);
