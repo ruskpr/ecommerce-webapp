@@ -7,32 +7,34 @@ namespace SleekClothing.Helpers
 {
     public class WishlistHelper
     {
-        #region db
 
-        public static void AddToWishlistDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
+        public static void AddToWishlist(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
         {
-            if (userClaim == null && context == null) { return; }
+            if (userClaim == null && context == null) return;
+
             var user = UsersHelper.GetUser(context, userClaim);
 
             // 1. get users existing wishlist
-            List<Product> updatedWishlist = GetUserWishlistDb(userClaim, context);
+            List<Product> oldWishlist = GetUserWishlist(userClaim, context) ?? new List<Product>();
+
+            if (oldWishlist.Any(x => x.Id == product.Id)) return;
 
             // 2. add new product to wishlist
-            updatedWishlist.Add(product);
+            oldWishlist.Add(product);
 
             // 3. update users wishlist
-            var wishlist = context.UserWishlists.FirstOrDefault(c => c.UserId == user.Id);
+            var newWishlist = context.UserWishlists.FirstOrDefault(c => c.UserId == user.Id);
 
-            if (wishlist != null)
+            if (newWishlist != null)
             {
-                wishlist.WishlistDataJSON = JsonConvert.SerializeObject(updatedWishlist, Formatting.Indented);
+                newWishlist.WishlistDataJSON = JsonConvert.SerializeObject(oldWishlist, Formatting.Indented);
             }
             else
             {
                 context.UserWishlists.Add(new UserWishlist()
                 {
                     UserId = user.Id,
-                    WishlistDataJSON = JsonConvert.SerializeObject(updatedWishlist, Formatting.Indented),
+                    WishlistDataJSON = JsonConvert.SerializeObject(oldWishlist, Formatting.Indented),
                 });
             }
 
@@ -41,7 +43,7 @@ namespace SleekClothing.Helpers
             context.SaveChanges();
         }
 
-        public static void RemoveFromWishlistDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
+        public static void RemoveFromWishlist(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
         {
             if (userClaim == null && context == null) { return; }
             var user = UsersHelper.GetUser(context, userClaim);
@@ -76,7 +78,7 @@ namespace SleekClothing.Helpers
             context.SaveChanges();
         }
 
-        public static List<Product> GetUserWishlistDb(ClaimsPrincipal userClaim, ApplicationDbContext context)
+        public static List<Product> GetUserWishlist(ClaimsPrincipal userClaim, ApplicationDbContext context)
         {
             var user = UsersHelper.GetUser(context, userClaim);
 
@@ -98,6 +100,5 @@ namespace SleekClothing.Helpers
             return products;
         }
 
-        #endregion
     }
 }

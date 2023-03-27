@@ -15,34 +15,38 @@
         <div class="card m-4">
             <div class="row g-0">
                 <div class="col">
-                    <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
+                    <img src="@product.ImageLocation" class=" img-fluid rounded-start" alt="@product.Name">
                 </div>
                 <div class="col-9">
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
-                        <form method="post" class="d-flex">
-                            <p class="card-text my-2">Quantity: @product.CartQuantity</p>
-                            <button asp-page-handler="RemoveFromWishlist"
-                            asp-route-productId="@product.Id"
-                                    class="btn btn-outline-danger border mx-3 px-2 pt-2
-                            icon-hover">
-                                <i class="fas fa-minus fa-lg text-white px-1"></i>
-                            </button>
-                            <button asp-page-handler="AddToWishlist"
-                            asp-route-productId="@product.Id"
-                                    class="btn btn-outline-success border px-2 pt-2
-                            icon-hover">
-                                <i class="fas fa-plus fa-lg text-white px-1"></i>
-                            </button>
-                        </form>
-
                         <p class="card-text my-2">Category: @product.Category.Name</p>
                         @if (product.HasDiscount)
                         {
                             <p class="card-text my-2">Discount: @product.Discount %</p>
+                            <p class="card-text my-2">
+                                <span>Price: </span><span class="text-decoration-line-through">@product.Price.ToString("c2")</span>
+                                <span class="fw-bold text-success">@product.PriceAfterDiscount.ToString("c2")</span>
+                            </p>
 
                         }
-                        <p class="card-text my-2">@product.Price.ToString("c2")</p>
+                        else if (!product.HasDiscount)
+                        {
+                            <p class="card-text my-2"><span>Price: </span>@product.Price.ToString("c2")</p>
+                        }
+                        <form method="post" class="">
+                            <button asp-page-handler="RemoveFromWishlist"
+                            asp-route-productId="@product.Id"
+                                    class="btn btn-outline-danger border px-2 pt-2
+                            icon-hover">
+                                Remove from wishlist
+                            </button>
+                            <button asp-page-handler="AddToCart"
+                            asp-route-productId="@product.Id"
+                                    class="btn btn-outline-success border px-2 pt-2 icon-hover">
+                                Add to cart
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -65,13 +69,13 @@ else if (SignInManager.IsSignedIn(User) && Model.ProductWishlist.Count == 0)
 {
     <div class="d-flex flex-column align-items-center justify-content-center align my-5">
         <h1 class="text-white-50">¯\_(ツ)_/¯</h1>
-        <h1>You have no items in your cart</h1>
+        <h1>You have no items in your wishlist</h1>
         <a href="/products">Click here to browse our products</a>
     </div>
 }
 else
 {
     <div style="padding: 100px 0px;">
-        <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to view your cart.</span>
+        <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to view your wishlist.</span>
     </div>
 }

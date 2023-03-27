@@ -21,8 +21,8 @@ namespace SleekClothing.Pages.wishlist
 
         }
 
-        public IList<Product> ProductWishlist { get; set; } = default!;
-        
+        public IList<Product> ProductWishlist { get; set; } = new List<Product>();
+
 
         public async Task OnGetAsync()
         {
@@ -33,31 +33,27 @@ namespace SleekClothing.Pages.wishlist
 
                 if (_context != null)
                 {
-                    ProductWishlist = await Task.Run(() => WishlistHelper.GetUserWishlistDb(User, _context));
+                    ProductWishlist = await Task.Run(() => WishlistHelper.GetUserWishlist(User, _context));
                 }
             }
-                
-
+               
         }
 
-        public IActionResult OnPostAddToWishlist(int productId)
+        public IActionResult OnPostAddToCart(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
             CartHelper.AddToCartDb(product, _context, this.User);
 
-            //Products = _context.Products.ToList();
-            return Redirect("/cart");
+
+            return Page();
         }
 
         public IActionResult OnPostRemoveFromWishlist(int productId)
         {
             Product product = _context.Products.First(x => x.Id == productId);
-            CartHelper.RemoveFromCartDb(product, _context, this.User);
+            WishlistHelper.RemoveFromWishlist(product, _context, this.User);
 
-            //Products = _context.Products.ToList();
-            return Redirect("/cart");
             return Page();
-
         }
     }
 }

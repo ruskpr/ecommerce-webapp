@@ -24,26 +24,37 @@ namespace SleekClothing.Pages.products
 
         public IList<Product> Products { get; set; }
 
-        public string SearchTerm { get; set; }
 
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
             {
-
                 Products = await _context.Products.ToListAsync();
-
-
             }
         }
 
 
         public IActionResult OnPostAddToCart(int productId)
         {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Identity/Account/Login");
+
             Product product = _context.Products.First(x => x.Id == productId);
 
             var u = UsersHelper.GetUser(_context, this.User);
             CartHelper.AddToCartDb(product, _context, User);
+
+            //Products = _context.Products.ToList();
+            return Page();
+        }
+
+        public IActionResult OnPostAddToWishlist(int productId)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Identity/Account/Login");
+
+            Product product = _context.Products.First(x => x.Id == productId);
+            WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
             return Page();

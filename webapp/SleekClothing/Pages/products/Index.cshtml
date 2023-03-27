@@ -5,7 +5,7 @@
     ViewData["Title"] = "Products";
 }
 
-<div class="text-center bg-primary text-lg-start text-white text-muted mt-0">
+@*<div class="text-center bg-primary text-lg-start text-white text-muted mt-0">
     <!-- Section: Links  -->
     <section class="text-white">
         <div class="container text-center text-md-start pt-4 pb-4">
@@ -26,6 +26,7 @@
 
     
 </div>
+*@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
@@ -115,7 +116,7 @@
                             <form method="post" class="d-flex gap-1 h-auto align-items-center justify-content-center bg-white border-0 py-2">
                                 <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./Details" asp-route-id="@product.Id">Details</a>
                                 <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
-                                <a asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                                <button asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></button>
                             </form>
                         </div>
                         <img>

@@ -21,7 +21,7 @@
     }
     else
     {
-        products = new List<Models.Product>();
+        products = CartHelper.GetGroupedCartItemsCookie(this.Context.Request);
     }
     
 
@@ -40,36 +40,24 @@
 </head>
 <body>
     <header>
-        <!-- Jumbotron -->
         <div class="py-2 text-center bg-white border-bottom">
             <div class="container">
                 <div class="row gy-3">
                     <!-- Left elements -->
-                    <div class="col-lg-2 col-sm-6 col-md-3 col-6 d-flex align-baseline d-none d-sm-block ">
+                    <div class="col d-flex align-baseline d-none d-sm-block ">
                         <a href="/" class="float-start navbar-brand text-nowrap">
                             Sleek Clothing Co.
                         </a>
                     </div>
                     <!-- Left elements -->
-                    <!-- Center elements -->
-                    <div class="col-lg-8 col-md-6 col-8 d-none d-md-block">
-                        <form class="input-group  float-center d-flex justify-content-center align-items-start">
-                            <div class="form-outline">
-                                <input type="search" placeholder="Search..." id="form1" class="form-control" />
-                            </div>
-                            <button type="button" class="btn btn-primary shadow-0">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <!-- Center elements -->
+                    
                     <!-- Right elements -->
-                    <div class="order-lg-last col-lg-2 col-md-3 col-sm-6 col-12 border">
-                        <div class="d-flex float-end">
+                    <div class="col ">
+                        <div class="d-flex justify-content-end w-100">
                             <partial name="_LoginPartial" />
                             <button data-bs-toggle="offcanvas" 
                                 data-bs-target="#offcanvasScrolling" 
-                                class="mt-1 position-relative btn btn-light me-1 rounded py-1 px-3 nav-link "> 
+                                class="position-relative btn btn-light rounded py-1 px-3 nav-link"> 
                                 <i class="fas fa-cart-shopping m-1 me-md-2"></i>
                                 
                                 @if (SignInManager.IsSignedIn(User))
@@ -80,8 +68,17 @@
                                             @CartHelper.GetCartItemsCountDb(user.Id, context)
                                         </span>
                                     }
-                                }                            
-                                
+                                }   
+                                else
+                                {
+                                    @if (CartHelper.GetCartItemsCountCookie(this.Context) > 0)
+                                    {
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                            @CartHelper.GetCartItemsCountCookie(this.Context)
+                                        </span>
+                                    }
+                                }
+
                             </button>
                             
                         </div>
@@ -90,7 +87,6 @@
                 </div>
             </div>
         </div>
-        <!-- Jumbotron -->
         <!-- Lower Navbar -->
         <div class="border-bottom">
             <nav class="container navbar navbar-expand-lg navbar-light bg-white">
@@ -103,22 +99,11 @@
                         <a class="nav-link text-dark" href="/products">All Products</a>
                     </li>
                     <li class="px-3 nav-item">
-                        <a class="nav-link text-dark" href="#">Deals</a>
-                    </li>
-                    <li class="px-3 nav-item">
-                        <a class="nav-link text-dark" href="#">Tops</a>
-                    </li>
-                    <li class="px-3 nav-item">
-                        <a class="nav-link text-dark" href="#">Bottoms</a>
-                    </li>
-                    <li class="px-3 nav-item">
                         <a class="nav-link text-dark" href="/cart">Cart</a>
                     </li>
                     <li class="px-3 nav-item">
                         <a class="nav-link text-dark" href="/wishlist">Wishlist</a>
                     </li>
-
-
                 </ul>
                 <!-- Container wrapper -->
             </nav>
@@ -143,47 +128,49 @@
             @* Content *@
             <div class="offcanvas-body">
                 @* Render cart items here *@
-            @if (!SignInManager.IsSignedIn(User))
+            @foreach (var product in products)
             {
-                <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to see your items</span>
+                <div class="card m-4" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col">
+                            <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                            </div>
+                        </div>
+                    </div>
+                    @if (product.CartQuantity > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
+                            @product.CartQuantity
+                        </span>
+                    }
+
+                </div>
+
+            }
+            @if (products.Count == 0)
+            {
+                <p class="fw-light fs-4 mx-4">No items in your cart</p>
+                <span class="fs-6 mx-4"><a href="/products">View products</a></span>
+            }
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
+                <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+                <span class="fs-6"><a href="/cart">View full cart</a></span>
             }
             else
             {
-                @foreach (var product in products)
-                {
-                    <div class="card m-4" style="max-width: 540px;">
-                        <div class="row g-0">
-                            <div class="col">
-                                <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
-                            </div>
-                            <div class="col-9">
-                                <div class="card-body">
-                                    <h5 class="card-title">@product.Name</h5>
-                                    <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
-                                </div>
-                            </div>
-                        </div>
-                        @if (product.CartQuantity > 0)
-                        {
-                            <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
-                                @product.CartQuantity
-                            </span>
-                        }
+                <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalCookie(this.Context.Request).ToString("c2")</p>
+                <a href="/cart" class="btn btn-primary mx-4 mb-3">Checkout</a>
+                <br/>
+                <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to manage your items</span>
 
-                    </div>
-
-                }
-                @if (products.Count == 0)
-                {
-                    <p class="fw-light fs-4 mx-4">No items in your cart</p>
-                    <span class="fs-6 mx-4"><a href="/products">View products</a></span>
-                }
-                else
-                {
-                    <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
-                    <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
-                    <span class="fs-6"><a href="/cart">View full cart</a></span>
-                }
             }
             
             </div>

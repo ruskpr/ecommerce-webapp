@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\black sunglasses.png",
+      "PackagePath": "staticwebassets\\images\\black sunglasses.png"
+    },
+    {
       "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\blackshirt.jfif",
       "PackagePath": "staticwebassets\\images\\blackshirt.jfif"
     },
@@ -21,12 +25,36 @@
       "PackagePath": "staticwebassets\\images\\blacktshirt.png"
     },
     {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\blue blazer.png",
+      "PackagePath": "staticwebassets\\images\\blue blazer.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\half zip polo shirt.png",
+      "PackagePath": "staticwebassets\\images\\half zip polo shirt.png"
+    },
+    {
       "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\hoodie.png",
       "PackagePath": "staticwebassets\\images\\hoodie.png"
     },
     {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\loafers.png",
+      "PackagePath": "staticwebassets\\images\\loafers.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\pink sunglasses.png",
+      "PackagePath": "staticwebassets\\images\\pink sunglasses.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\plaid shirt.png",
+      "PackagePath": "staticwebassets\\images\\plaid shirt.png"
+    },
+    {
       "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\skinnyjeans.png",
       "PackagePath": "staticwebassets\\images\\skinnyjeans.png"
+    },
+    {
+      "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\images\\trench coat.png",
+      "PackagePath": "staticwebassets\\images\\trench coat.png"
     },
     {
       "Id": "E:\\russ\\repos\\sleek-ecommerce-webapp\\webapp\\SleekClothing\\wwwroot\\js\\site.js",
