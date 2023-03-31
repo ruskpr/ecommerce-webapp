@@ -7,6 +7,9 @@
 @{
     ViewData["Title"] = "Wishlist";
 }
+
+<h1 class="pt-3">Wishlist</h1>
+
 @* if there are items in the user's cart, show cart details *@
 @if (SignInManager.IsSignedIn(User) && Model.ProductWishlist.Count > 0)
 {
@@ -61,9 +64,9 @@
         </div>
 
     }
-    <p class="fw-light fs-4 mx-4">Total @Model.CartTotal</p>
-    <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
-    <span class="fs-6"><a href="/products">Browse products</a></span>
+    <div class="d-flex justify-content-center">
+        <a href="/products" class="btn btn-outline-primary border px-2 pt-2 icon-hover">Continue shopping</a>
+    </div>                      
 }
 else if (SignInManager.IsSignedIn(User) && Model.ProductWishlist.Count == 0)
 {

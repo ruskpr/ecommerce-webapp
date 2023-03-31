@@ -8,6 +8,9 @@
     ViewData["Title"] = "Cart";
 }
 
+
+<h1 class="pt-3">Cart</h1>
+
 @* if there are items in the user's cart, show cart details *@
 @if (SignInManager.IsSignedIn(User) && Model.Products.Count > 0)
 {
@@ -59,7 +62,7 @@
 
     }
     <p class="fw-light fs-4 mx-4">Total @Model.CartTotal</p>
-    <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+    <a href="/checkout" class="btn btn-primary mx-4">Checkout</a>
     <span class="fs-6"><a href="/products">Browse products</a></span>
 }
 else if (SignInManager.IsSignedIn(User) && Model.Products.Count == 0)

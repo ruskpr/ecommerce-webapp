@@ -162,13 +162,13 @@
             @if (SignInManager.IsSignedIn(User) && products.Count > 0)
             {
                 <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
-                <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
+                <a href="/checkout" class="btn btn-primary mx-4">Checkout</a>
                 <span class="fs-6"><a href="/cart">View full cart</a></span>
             }
             else if (!SignInManager.IsSignedIn(User) && products.Count > 0)
             {
                 <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalCookie(this.Context.Request).ToString("c2")</p>
-                <a href="/cart" class="btn btn-primary mx-4 mb-3">Checkout</a>
+                <a href="/checkout" class="btn btn-primary mx-4 mb-3">Checkout</a>
                 <br/>
                 <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to manage your items</span>
 
