@@ -1,6 +1,5 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekClothing.Data;
@@ -151,12 +150,13 @@ namespace SleekClothing.Helpers
 
         public static void AddToCartDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
         {
-            if (userClaim == null && context == null) { return; }
+            if (userClaim == null || context == null) return; 
             var user = UsersHelper.GetUser(context, userClaim);
             // 1. get users existing cart
             List<Product> updatedCart = GetUserCartDb(user.Id, context);
 
             // 2. add new product to cart
+
             updatedCart.Add(product);
 
             // 3. update users cart
@@ -225,10 +225,9 @@ namespace SleekClothing.Helpers
             {
                 cartJson = context.UserCarts.Where(x => x.UserId == userid).First().CartDataJSON;
             }
-            catch (Exception)
+            catch 
             {
                 return new List<Product>();
-                throw;
             }
 
             products = JsonConvert.DeserializeObject<List<Product>>(cartJson);

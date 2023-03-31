@@ -136,14 +136,15 @@
                                 </span>
                                 </div>
                             }
+                            
+                            @if (!product.IsOutOfStock && !product.HasDiscount) // show price like normal if no other conditions met
+                            {
+                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                            }
                             @if (product.IsOutOfStock)
                             {
                                 <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
 
-                            }
-                            @if (!product.IsOutOfStock && !product.HasDiscount) // show price like normal if no other conditions met
-                            {
-                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
                             }
                         </div>
                     </div>

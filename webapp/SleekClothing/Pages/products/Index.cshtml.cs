@@ -44,7 +44,7 @@ namespace SleekClothing.Pages.products
             var u = UsersHelper.GetUser(_context, this.User);
             CartHelper.AddToCartDb(product, _context, User);
 
-            //Products = _context.Products.ToList();
+            Products = _context.Products.ToList();
             return Page();
         }
 
