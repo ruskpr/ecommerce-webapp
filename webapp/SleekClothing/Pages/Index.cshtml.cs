@@ -30,8 +30,14 @@ namespace SleekClothing.Pages
 
         public IActionResult OnPostAddToCart(int productId)
         {
+            Products = _context.Products.ToList();
+            NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
+
             Product product = _context.Products.First(x => x.Id == productId);
 
+            //handle product out of stock
+
+            if (product.IsOutOfStock) return Page();
             if (!User.Identity.IsAuthenticated)
             {
                 CartHelper.AddToCartCookie(product, HttpContext);
@@ -42,8 +48,7 @@ namespace SleekClothing.Pages
             }
 
 
-            Products = _context.Products.ToList();
-            NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
+            
             return Page();
         }
 

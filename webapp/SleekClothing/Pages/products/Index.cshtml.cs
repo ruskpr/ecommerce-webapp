@@ -36,15 +36,24 @@ namespace SleekClothing.Pages.products
 
         public IActionResult OnPostAddToCart(int productId)
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            Products = _context.Products.ToList();
 
             Product product = _context.Products.First(x => x.Id == productId);
 
-            var u = UsersHelper.GetUser(_context, this.User);
-            CartHelper.AddToCartDb(product, _context, User);
+            //handle product out of stock
+            if (product.IsOutOfStock) return Page();
 
-            Products = _context.Products.ToList();
+            var u = UsersHelper.GetUser(_context, this.User);
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                CartHelper.AddToCartCookie(product, HttpContext);
+            }
+            else
+            {
+                CartHelper.AddToCartDb(product, _context, this.User);
+            }
+
             return Page();
         }
 
@@ -54,6 +63,7 @@ namespace SleekClothing.Pages.products
                 return Redirect("/Identity/Account/Login");
 
             Product product = _context.Products.First(x => x.Id == productId);
+
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();

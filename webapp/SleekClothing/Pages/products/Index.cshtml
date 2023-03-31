@@ -5,28 +5,25 @@
     ViewData["Title"] = "Products";
 }
 
-@*<div class="text-center bg-primary text-lg-start text-white text-muted mt-0">
+<div class="text-lg-start text-white text-muted mt-0">
     <!-- Section: Links  -->
-    <section class="text-white">
-        <div class="container text-center text-md-start pt-4 pb-4">
+    <section class="">
+        <div class="container text-center text-md-start py-4">
            <h2>Search for products</h2>
            <div>
-                <div class="input-group m-3">
+                <div class="input-group my-3">
                     <div class="form-outline">
                         <input type="search" id="form1" class="form-control" placeholder="Tops... Hoodies.."/>
                     </div>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-outline-primary">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
            </div>
         </div>
     </section>
-    <!-- Section: Links  -->
-
-    
 </div>
-*@
+
 <p>
     <a asp-page="Create">Create New</a>
 </p>
@@ -144,7 +141,6 @@
                             @if (product.IsOutOfStock)
                             {
                                 <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
-
                             }
                         </div>
                     </div>
