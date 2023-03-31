@@ -44,6 +44,10 @@ namespace SleekClothing.Pages.wishlist
             Product product = _context.Products.First(x => x.Id == productId);
             CartHelper.AddToCartDb(product, _context, this.User);
 
+            // remove it from wishlist
+            WishlistHelper.RemoveFromWishlist(product, _context, this.User);
+
+            ProductWishlist = WishlistHelper.GetUserWishlist(User, _context);
 
             return Page();
         }
@@ -53,6 +57,7 @@ namespace SleekClothing.Pages.wishlist
             Product product = _context.Products.First(x => x.Id == productId);
             WishlistHelper.RemoveFromWishlist(product, _context, this.User);
 
+            ProductWishlist = WishlistHelper.GetUserWishlist(User, _context);
             return Page();
         }
     }

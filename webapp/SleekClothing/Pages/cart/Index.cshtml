@@ -27,13 +27,13 @@
                             asp-route-productId="@product.Id" 
                             class="btn btn-outline-danger border mx-3 px-2 pt-2
                             icon-hover">
-                                <i class="fas fa-minus fa-lg text-white px-1"></i>
+                                <i class="fas fa-minus fa-lg px-1"></i>
                             </button>
                             <button asp-page-handler="AddToCart"
                                 asp-route-productId="@product.Id"
                                     class="btn btn-outline-success border px-2 pt-2
                             icon-hover">
-                                <i class="fas fa-plus fa-lg text-white px-1"></i>
+                                <i class="fas fa-plus fa-lg px-1"></i>
                             </button>
                         </form>
 
@@ -65,7 +65,7 @@
 else if (SignInManager.IsSignedIn(User) && Model.Products.Count == 0)
 {
     <div class="d-flex flex-column align-items-center justify-content-center align my-5">
-        <h1 class="text-white-50">¯\_(ツ)_/¯</h1>
+        <h1 class="fw-bold">¯\_(ツ)_/¯</h1>
         <h1>You have no items in your cart</h1>
         <a href="/products">Click here to browse our products</a>
     </div>

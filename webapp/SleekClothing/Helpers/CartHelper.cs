@@ -4,6 +4,7 @@ using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using SleekClothing.Data;
 using SleekClothing.Models;
+using SleekClothing.Pages.products;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -28,6 +29,18 @@ namespace SleekClothing.Helpers
             //httpContext.Response.Cookies.Delete(COOKIE_NAME);
             httpContext.Response.Cookies.Append(COOKIE_NAME, "", cookieOptions);
             
+        }
+
+        public static List<Product> GetUserCartCookie(HttpContext httpContext)
+        {
+            // get cookie that is named COOKIE_NAME
+            var cookieValue = httpContext.Request.Cookies[COOKIE_NAME];
+            if (cookieValue == null)
+            {
+                return new List<Product>();
+            }
+
+            return JsonConvert.DeserializeObject<List<Product>>(cookieValue) ?? new List<Product>();
         }
 
         public static void AddToCartCookie(Product newProduct, HttpContext httpContext)
@@ -290,6 +303,23 @@ namespace SleekClothing.Helpers
             return total;
         }
 
+        #endregion
+
+        #region convert cookie items to db items
+
+        public static void ConvertToDB(HttpContext httpContext, ClaimsPrincipal user, ApplicationDbContext context)
+        {
+            var cookieItems = GetUserCartCookie(httpContext);
+
+            if (cookieItems.Count == 0) return;
+
+            foreach (var product in cookieItems)
+            {
+                AddToCartDb(product, context, user);
+            }
+
+            DeleteCartCookie(httpContext);
+        }
         #endregion
     }
 }

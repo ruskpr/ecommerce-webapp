@@ -56,6 +56,7 @@ namespace SleekClothing.Pages
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
+            NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
             return Page();
         }
     }

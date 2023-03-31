@@ -1,5 +1,4 @@
-﻿@* CODE *@
-@using Helpers
+﻿@using Helpers
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.EntityFrameworkCore;
 @using SleekClothing.Data;
@@ -18,12 +17,14 @@
     {
         user = UsersHelper.GetUser(context, User);
         products = CartHelper.GetGroupedCartItemsDb(user.Id, context);
+
+        // add cookie items to users cart
+        //CartHelper.ConvertToDB(this.Context, User, context);
     }
     else
     {
         products = CartHelper.GetGroupedCartItemsCookie(this.Context.Request);
     }
-    
 
 }
 
@@ -158,13 +159,13 @@
                 <span class="fs-6 mx-4"><a href="/products">View products</a></span>
             }
 
-            @if (SignInManager.IsSignedIn(User))
+            @if (SignInManager.IsSignedIn(User) && products.Count > 0)
             {
                 <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalDb(user.Id, context).ToString("c2")</p>
                 <a href="/cart" class="btn btn-primary mx-4">Checkout</a>
                 <span class="fs-6"><a href="/cart">View full cart</a></span>
             }
-            else
+            else if (!SignInManager.IsSignedIn(User) && products.Count > 0)
             {
                 <p class="fw-light fs-4 mx-4">Total @CartHelper.GetCartTotalCookie(this.Context.Request).ToString("c2")</p>
                 <a href="/cart" class="btn btn-primary mx-4 mb-3">Checkout</a>
