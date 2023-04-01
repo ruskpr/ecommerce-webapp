@@ -13,12 +13,17 @@
            <div>
                 <form method="post" class="input-group my-3">
                     <div class="form-outline">
-                        <input type="search" id="form1" class="form-control" placeholder="Tops... Hoodies.."/>
+                        <input type="search" name="SearchTerm" id="form1" class="form-control rounded-0 rounded-start" placeholder="Tops... Hoodies.."/>
                     </div>
-                    <button asp-page-handler="Search" asp-route-productId="" type="submit" class="btn btn-outline-primary">
+                    <button asp-page-handler="Search" type="submit" class="btn btn-outline-primary rounded-end">
                         <i class="fas fa-search"></i>
                     </button>
+                    @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+                    {
+                    <button class="btn btn-outline-secondary rounded mx-3" asp-page-handler="ResetSearch" type="submit">reset filters</button>
+                    }
                 </form>
+
            </div>
         </div>
     </section>
@@ -26,10 +31,29 @@
 
 @* Product cards *@
 <section>
-    <div method="post" class="container my-5">
+    <div class="container my-5">
         <header class="mb-4">
+            @if (string.IsNullOrWhiteSpace(Model.SearchTerm))
+            {
             <h3>All Products</h3>
+            }
+            else
+            {
+            <h3>Found @Model.Products.Count() Results for "@Model.SearchTerm"</h3>
+            }
+            @if (Model.Products.Count() == 0)
+            {
+                <div class="d-flex gap-1">
+                <p>Try searching for something else</p>
+
+                <span>or <a asp-page="./Index">reset filters</a></span>
+
+                </div>
+            }
+
+
         </header>
+
 
         <div class="row">
             @foreach (var product in Model.Products)
@@ -79,10 +103,6 @@
                 </div>
             }
 
-        </div>
-        
-        <div class="d-flex justify-content-center m-4">
-            <a href="/products" class="btn btn-primary border px-2 pt-2 mx-1 icon-hover">Show More</a>
         </div>
     </div>
 </section>

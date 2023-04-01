@@ -22,6 +22,10 @@ namespace SleekClothing.Pages.products
             _context = context;
         }
 
+
+        [BindProperty]
+        public string SearchTerm { get; set; }
+
         public IList<Product> Products { get; set; }
 
 
@@ -33,6 +37,18 @@ namespace SleekClothing.Pages.products
             }
         }
 
+        public IActionResult OnPostResetSearch()
+        {
+            return Redirect("/products");
+        }
+
+        public IActionResult OnPostSearch()
+        {
+
+            Products = _context.Products.Where(x => x.Name.Contains(SearchTerm) || x.Category.Name.Contains(SearchTerm)).ToList();
+
+            return Page();
+        }
 
         public IActionResult OnPostAddToCart(int productId)
         {
