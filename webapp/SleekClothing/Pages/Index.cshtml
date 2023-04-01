@@ -30,7 +30,7 @@
         </header>
 
         <div class="row">
-            @foreach (var product in Model.NewestProducts)
+            @foreach (var product in Model.Products)
             {
                 <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
                     <div class="card w-100 border-0 my-2 shadow-2-strong">
@@ -45,7 +45,7 @@
                             </form>
                         </div>
                         <img>
-                        <div class="d-flex flex-column h-100">
+                        <div class="d-flex flex-column">
                             @* Card Content *@
                             <h5 class="card-title">@product.Name</h5>
                             @if (product.HasDiscount)
@@ -56,20 +56,22 @@
                                     <span class="text-decoration-line-through">
                                         @product.Price.ToString("c2")
                                     </span>
-                                    <span class="text-decoration-none fw-bold">
+                                    <span class="fw-bold">
                                         @product.PriceAfterDiscount.ToString("c2")
                                     </span>
                                 </div>
                             }
+                            else
+                            {
+                                <span class="">
+                                    @product.Price.ToString("c2")
+                                </span>
+                            }
+
                             @if (product.IsOutOfStock)
                             {
                                 <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
-
-                            }
-                            @if (!product.IsOutOfStock && !product.HasDiscount) // show price like normal if no other conditions met
-                            {
-                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
-                            }
+                            }                            
                         </div>
                     </div>
                 </div>

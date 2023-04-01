@@ -15,16 +15,15 @@ namespace SleekClothing.Pages
             _context = context;
         }
 
-        public IList<Product> Products { get; set; } = default!;
-        public IList<Product> NewestProducts { get; set; } = default!;
+        public List<Product> Products { get; set; } = default!;
 
 
         public async Task OnGetAsync()
         {
             if (_context.Products != null)
             {
-                Products = await _context.Products.ToListAsync();
-                NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
+                Products = await _context.Products.ToListAsync(); // get from db
+                Products = Products.OrderByDescending(x => x.DateCreated).Take(8).ToList(); // order by newest
             }
 
         }
@@ -32,7 +31,7 @@ namespace SleekClothing.Pages
         public IActionResult OnPostAddToCart(int productId)
         {
             Products = _context.Products.ToList();
-            NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
+            Products = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
 
             Product product = _context.Products.First(x => x.Id == productId);
 
@@ -60,7 +59,7 @@ namespace SleekClothing.Pages
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
-            NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
+            Products = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
             return Redirect("/");
         }
     }

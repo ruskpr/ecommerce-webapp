@@ -125,19 +125,21 @@
                                 <p class="text-success fw-bold mb-0">@product.Discount% OFF</p>
                                 <div class="d-flex gap-2">
 
-                                <span class="text-decoration-line-through">
-                                    @product.Price.ToString("c2")
-                                </span>
-                                <span class="text-decoration-none fw-bold">
-                                    @product.PriceAfterDiscount.ToString("c2")
-                                </span>
+                                    <span class="text-decoration-line-through">
+                                        @product.Price.ToString("c2")
+                                    </span>
+                                    <span class="fw-bold">
+                                        @product.PriceAfterDiscount.ToString("c2")
+                                    </span>
                                 </div>
                             }
-                            
-                            @if (!product.IsOutOfStock && !product.HasDiscount) // show price like normal if no other conditions met
+                            else
                             {
-                                <p class="card-text">@product.PriceAfterDiscount.ToString("c2")</p>
+                                <span class="">
+                                    @product.Price.ToString("c2")
+                                </span>
                             }
+
                             @if (product.IsOutOfStock)
                             {
                                 <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
