@@ -57,7 +57,6 @@ namespace SleekClothing.Pages.cart
 
             //Products = _context.Products.ToList();
             return Redirect("/cart");
-            return Page();
 
         }
     }

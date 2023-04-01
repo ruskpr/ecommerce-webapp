@@ -251,42 +251,68 @@ namespace SleekClothing.Helpers
         // get list of one of each item in cart but filtered with the correct quantity
         public static List<Product> GetGroupedCartItemsDb(string userid, ApplicationDbContext context)
         {
-            string cartJson = context.UserCarts.Where(x => x.UserId == userid).First().CartDataJSON;
-
-            var products = JsonConvert.DeserializeObject<List<Product>>(cartJson);
-
-            // group each unique item into its own list 
-            var group = products
-            .GroupBy(u => u.Id)
-            .Select(grp => grp.ToList())
-            .ToList();
-
-            // loop through each grouped list and add it to the returned list 
-            // with the correct quantity of that unique item
-            List<Product> groupedProducts = new List<Product>();
-            foreach (var list in group)
+            try
             {
-                var product = list[0];
-                product.CartQuantity = list.Count();
-                groupedProducts.Add(product);
-            }
+                var userCart = context.UserCarts.Where(x => x.UserId == userid).First();
 
-            return groupedProducts ?? new List<Product>(); // return empty list if cookie is null
+                if (userCart == null)
+                {
+                    context.UserCarts.Add(new UserCart()
+                    {
+                        UserId = userid,
+                        CartDataJSON = "[]",
+                    });
+
+                    context.SaveChanges();
+                    return new List<Product>();
+                }
+
+
+                string cartJson = userCart.CartDataJSON;
+
+                if (string.IsNullOrEmpty(cartJson)) return new List<Product>(); // return empty list if no cart exists
+
+                var products = JsonConvert.DeserializeObject<List<Product>>(cartJson);
+
+                // group each unique item into its own list 
+                var group = products
+                .GroupBy(u => u.Id)
+                .Select(grp => grp.ToList())
+                .ToList();
+
+                // loop through each grouped list and add it to the returned list 
+                // with the correct quantity of that unique item
+                List<Product> groupedProducts = new List<Product>();
+                foreach (var list in group)
+                {
+                    var product = list[0];
+                    product.CartQuantity = list.Count();
+                    groupedProducts.Add(product);
+                }
+
+                return groupedProducts ?? new List<Product>(); // return empty list if cookie is null
+            }
+            catch { return new List<Product>(); }
+            
         }
 
         // total items in cart
         public static int GetCartItemsCountDb(string userid, ApplicationDbContext context)
         {
-            var cart = context.UserCarts.Where(x => x.UserId == userid).First();
-
-            if (cart == null)
+            try
             {
-                return 0;
+                var cart = context.UserCarts.Where(x => x.UserId == userid).First();
+
+                if (cart == null)
+                {
+                    return 0;
+                }
+
+                var products = JsonConvert.DeserializeObject<List<Product>>(cart.CartDataJSON);
+
+                return products.Count();
             }
-
-            var products = JsonConvert.DeserializeObject<List<Product>>(cart.CartDataJSON);
-
-            return products.Count();
+            catch {return 0;}
         }
 
         public static decimal GetCartTotalDb(string userid, ApplicationDbContext context)

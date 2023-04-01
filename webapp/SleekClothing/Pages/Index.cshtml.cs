@@ -26,6 +26,7 @@ namespace SleekClothing.Pages
                 Products = await _context.Products.ToListAsync();
                 NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
             }
+
         }
 
         public IActionResult OnPostAddToCart(int productId)
@@ -37,7 +38,7 @@ namespace SleekClothing.Pages
 
             //handle product out of stock
 
-            if (product.IsOutOfStock) return Page();
+            if (product.IsOutOfStock) return Redirect("/");
             if (!User.Identity.IsAuthenticated)
             {
                 CartHelper.AddToCartCookie(product, HttpContext);
@@ -47,9 +48,7 @@ namespace SleekClothing.Pages
                 CartHelper.AddToCartDb(product, _context, this.User);
             }
 
-
-            
-            return Page();
+            return Redirect("/");
         }
 
         public IActionResult OnPostAddToWishlist(int productId)
@@ -62,7 +61,7 @@ namespace SleekClothing.Pages
 
             Products = _context.Products.ToList();
             NewestProducts = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
-            return Page();
+            return Redirect("/");
         }
     }
 }

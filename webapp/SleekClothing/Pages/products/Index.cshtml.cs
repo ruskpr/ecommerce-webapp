@@ -41,7 +41,7 @@ namespace SleekClothing.Pages.products
             Product product = _context.Products.First(x => x.Id == productId);
 
             //handle product out of stock
-            if (product.IsOutOfStock) return Page();
+            if (product.IsOutOfStock) return Redirect("/products");
 
             var u = UsersHelper.GetUser(_context, this.User);
 
@@ -54,7 +54,7 @@ namespace SleekClothing.Pages.products
                 CartHelper.AddToCartDb(product, _context, this.User);
             }
 
-            return Page();
+            return Redirect("/products");
         }
 
         public IActionResult OnPostAddToWishlist(int productId)
@@ -67,7 +67,7 @@ namespace SleekClothing.Pages.products
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
-            return Page();
+            return Redirect("/products");
         }
 
 
