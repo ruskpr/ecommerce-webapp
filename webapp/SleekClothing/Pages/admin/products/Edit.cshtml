@@ -5,13 +5,13 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<br/>
+<h1>Edit <span class="fw-light">@Model.Product.Name</span></h1>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" class="d-flex flex-column gap-2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Product.Id" />
             <div class="form-group">
@@ -54,16 +54,16 @@
                 <input asp-for="Product.ImageLocation" class="form-control" />
                 <span asp-validation-for="Product.ImageLocation" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <br/>
+            <div class="d-flex gap-2">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a asp-page="./Index" class="btn btn-outline-secondary">Back to List</a>
+
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
