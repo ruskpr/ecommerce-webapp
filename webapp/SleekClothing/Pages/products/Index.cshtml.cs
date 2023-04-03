@@ -44,9 +44,7 @@ namespace SleekClothing.Pages.products
 
         public IActionResult OnPostSearch()
         {
-
             Products = _context.Products.Where(x => x.Name.Contains(SearchTerm) || x.Category.Name.Contains(SearchTerm)).ToList();
-
             return Page();
         }
 
@@ -57,6 +55,7 @@ namespace SleekClothing.Pages.products
             Product product = _context.Products.First(x => x.Id == productId);
 
             //handle product out of stock
+            TempData["error"] = $"{product.Name} is out of stock.";
             if (product.IsOutOfStock) return Redirect("/products");
 
             var u = UsersHelper.GetUser(_context, this.User);
@@ -70,6 +69,7 @@ namespace SleekClothing.Pages.products
                 CartHelper.AddToCartDb(product, _context, this.User);
             }
 
+            TempData["success"] = $"{product.Name} added to cart successfully!";
             return Redirect("/products");
         }
 
@@ -83,6 +83,8 @@ namespace SleekClothing.Pages.products
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
+
+            TempData["success"] = $"{product.Name} has been added to your wishlist.";
             return Redirect("/products");
         }
 

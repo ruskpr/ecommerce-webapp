@@ -31,13 +31,15 @@ namespace SleekClothing.Pages
         public IActionResult OnPostAddToCart(int productId)
         {
             Products = _context.Products.ToList();
-            Products = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
 
             Product product = _context.Products.First(x => x.Id == productId);
 
             //handle product out of stock
+            TempData["error"] = $"{product.Name} is out of stock.";
+            if (product.IsOutOfStock) return Redirect("/products");
 
-            if (product.IsOutOfStock) return Redirect("/");
+            var u = UsersHelper.GetUser(_context, this.User);
+
             if (!User.Identity.IsAuthenticated)
             {
                 CartHelper.AddToCartCookie(product, HttpContext);
@@ -47,7 +49,8 @@ namespace SleekClothing.Pages
                 CartHelper.AddToCartDb(product, _context, this.User);
             }
 
-            return Redirect("/");
+            TempData["success"] = $"{product.Name} added to cart successfully!";
+            return Redirect("/products");
         }
 
         public IActionResult OnPostAddToWishlist(int productId)
@@ -56,11 +59,13 @@ namespace SleekClothing.Pages
                 return Redirect("/Identity/Account/Login");
 
             Product product = _context.Products.First(x => x.Id == productId);
+
             WishlistHelper.AddToWishlist(product, _context, this.User);
 
             Products = _context.Products.ToList();
-            Products = Products.OrderBy(x => x.DateCreated).Take(8).ToList();
-            return Redirect("/");
+
+            TempData["success"] = $"{product.Name} has been added to your wishlist.";
+            return Redirect("/products");
         }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SleekClothing.Data;
@@ -21,7 +22,12 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AuthorizeFolder("/admin", "RequireAdmins");
+});
+
+builder.Services.AddAuthorization(options => options.AddPolicy("RequireAdmins", policy => policy.RequireRole("Admin")));
 
 var app = builder.Build();
 
