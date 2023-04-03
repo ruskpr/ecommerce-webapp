@@ -31,45 +31,7 @@ namespace SleekClothing.Pages.admin.products
             {
                 Products = await _context.Products.ToListAsync();
             }
-        }
-
-
-        public IActionResult OnPostAddToCart(int productId)
-        {
-            Products = _context.Products.ToList();
-
-            Product product = _context.Products.First(x => x.Id == productId);
-
-            //handle product out of stock
-            if (product.IsOutOfStock) return Redirect("/products");
-
-            var u = UsersHelper.GetUser(_context, this.User);
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                CartHelper.AddToCartCookie(product, HttpContext);
-            }
-            else
-            {
-                CartHelper.AddToCartDb(product, _context, this.User);
-            }
-
-            return Redirect("/products");
-        }
-
-        public IActionResult OnPostAddToWishlist(int productId)
-        {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
-
-            Product product = _context.Products.First(x => x.Id == productId);
-
-            WishlistHelper.AddToWishlist(product, _context, this.User);
-
-            Products = _context.Products.ToList();
-            return Redirect("/products");
-        }
-
+        }  
 
     }
 }
