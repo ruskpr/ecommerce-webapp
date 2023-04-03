@@ -50,27 +50,36 @@ namespace SleekClothing.Pages.products
 
         public IActionResult OnPostAddToCart(int productId)
         {
-            Products = _context.Products.ToList();
-
-            Product product = _context.Products.First(x => x.Id == productId);
-
-            //handle product out of stock
-            TempData["error"] = $"{product.Name} is out of stock.";
-            if (product.IsOutOfStock) return Redirect("/products");
-
-            var u = UsersHelper.GetUser(_context, this.User);
-
-            if (!User.Identity.IsAuthenticated)
+            try
             {
-                CartHelper.AddToCartCookie(product, HttpContext);
-            }
-            else
-            {
-                CartHelper.AddToCartDb(product, _context, this.User);
-            }
+                Products = _context.Products.ToList();
 
-            TempData["success"] = $"{product.Name} added to cart successfully!";
-            return Redirect("/products");
+                Product product = _context.Products.First(x => x.Id == productId);
+
+                //handle product out of stock
+                TempData["error"] = $"{product.Name} is out of stock.";
+                if (product.IsOutOfStock) return Redirect("/products");
+
+                var u = UsersHelper.GetUser(_context, this.User);
+
+                if (!User.Identity.IsAuthenticated)
+                {
+                    CartHelper.AddToCartCookie(product, HttpContext);
+                }
+                else
+                {
+                    CartHelper.AddToCartDb(product, _context, this.User);
+                }
+
+                TempData["success"] = $"{product.Name} added to cart successfully!";
+                return Redirect("/products");
+            }
+            catch 
+            {
+                TempData["error"] = $"Login to add items to your cart.";
+                return Redirect("/Identity/Account/Login");
+            }
+            
         }
 
         public IActionResult OnPostAddToWishlist(int productId)
