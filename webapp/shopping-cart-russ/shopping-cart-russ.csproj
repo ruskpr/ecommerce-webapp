@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>shopping_cart_russ</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\ServiceDependencies\ShoppingCartRuss - Web Deploy\mssql3.arm.json" />
+    <Content Include="Properties\ServiceDependencies\ShoppingCartRuss - Web Deploy\profile.arm.json" />
+    <Content Include="Properties\ServiceDependencies\ShoppingCartRuss - Web Deploy\secrets1.arm.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\ShoppingCartRuss - Web Deploy.pubxml.user" />
+    <None Include="Properties\serviceDependencies.local.json.user" />
+    <None Include="Properties\serviceDependencies.ShoppingCartRuss - Web Deploy.json.user" />
+	  <PackageReference Include="Azure.Core" Version="1.30.0" />
+	  <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.0" />
+	  <PackageReference Include="Azure.Identity" Version="1.6.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+
+</Project>

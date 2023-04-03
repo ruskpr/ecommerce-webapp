@@ -1,0 +1,84 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity;
+@using SleekClothing.Helpers;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model SleekClothing.Pages.wishlist.IndexModel;
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<h1 class="pt-3">Wishlist</h1>
+
+@* if there are items in the user's cart, show cart details *@
+@if (SignInManager.IsSignedIn(User) && Model.ProductWishlist.Count > 0)
+{
+    @foreach (var product in Model.ProductWishlist)
+    {
+        <div class="card m-4">
+            <div class="row g-0">
+                <div class="col">
+                    <img src="@product.ImageLocation" class=" img-fluid rounded-start" alt="@product.Name">
+                </div>
+                <div class="col-9">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text my-2">Category: @product.Category.Name</p>
+                        @if (product.HasDiscount)
+                        {
+                            <p class="card-text my-2">Discount: @product.Discount %</p>
+                            <p class="card-text my-2">
+                                <span>Price: </span><span class="text-decoration-line-through">@product.Price.ToString("c2")</span>
+                                <span class="fw-bold text-success">@product.PriceAfterDiscount.ToString("c2")</span>
+                            </p>
+
+                        }
+                        else if (!product.HasDiscount)
+                        {
+                            <p class="card-text my-2"><span>Price: </span>@product.Price.ToString("c2")</p>
+                        }
+                        <form method="post" class="">
+                            <button asp-page-handler="RemoveFromWishlist"
+                            asp-route-productId="@product.Id"
+                                    class="btn btn-outline-danger border px-2 pt-2
+                            icon-hover">
+                                Remove from wishlist
+                            </button>
+                            <button asp-page-handler="AddToCart"
+                            asp-route-productId="@product.Id"
+                                    class="btn btn-outline-success border px-2 pt-2 icon-hover">
+                                Add to cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @if (product.CartQuantity > 0)
+            {
+                <span class="position-absolute top-0 start-100 translate-middle fs-4 badge rounded-pill bg-primary">
+                    @product.CartQuantity
+                </span>
+            }
+
+
+        </div>
+
+    }
+    <div class="d-flex justify-content-center">
+        <a href="/products" class="btn btn-outline-primary border px-2 pt-2 icon-hover">Continue shopping</a>
+    </div>                      
+}
+else if (SignInManager.IsSignedIn(User) && Model.ProductWishlist.Count == 0)
+{
+    <div class="d-flex flex-column align-items-center justify-content-center align my-5">
+        <h1 class="fw-bold">¯\_(ツ)_/¯</h1>
+        <h1>You have no items in your wishlist</h1>
+        <a href="/products">Click here to browse our products</a>
+    </div>
+}
+else
+{
+    <div style="padding: 100px 0px;">
+        <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to view your wishlist.</span>
+    </div>
+}

@@ -1,0 +1,108 @@
+﻿@page
+@model SleekClothing.Pages.products.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="text-lg-start text-white text-muted mt-0">
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start py-4">
+           <h2>Search for products</h2>
+           <div>
+                <form method="post" class="input-group my-3">
+                    <div class="form-outline">
+                        <input type="search" name="SearchTerm" id="form1" class="form-control rounded-0 rounded-start" placeholder="Tops... Hoodies.."/>
+                    </div>
+                    <button asp-page-handler="Search" type="submit" class="btn btn-outline-primary rounded-end">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+                    {
+                    <button class="btn btn-outline-secondary rounded mx-3" asp-page-handler="ResetSearch" type="submit">reset filters</button>
+                    }
+                </form>
+
+           </div>
+        </div>
+    </section>
+</div>
+
+@* Product cards *@
+<section>
+    <div class="container my-5">
+        <header class="mb-4">
+            @if (string.IsNullOrWhiteSpace(Model.SearchTerm))
+            {
+            <h3>All Products</h3>
+            }
+            else
+            {
+            <h3>Found @Model.Products.Count() Results for "@Model.SearchTerm"</h3>
+            }
+            @if (Model.Products.Count() == 0)
+            {
+                <div class="d-flex gap-1">
+                <p>Try searching for something else</p>
+
+                <span>or <a asp-page="./Index">reset filters</a></span>
+
+                </div>
+            }
+
+
+        </header>
+
+
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
+                    <div class="card w-100 border-0 my-2 shadow-2-strong">
+                        @* Card Image *@
+                        <img src="@product.ImageLocation" class="card-image position-relative card-img-top pb-2" style="aspect-ratio: 1 / 1">
+                        @* buttons *@
+                        <div class="card-buttons position-absolute w-100" style="top: 125px;">
+                            <form method="post" class="d-flex gap-1 h-auto align-items-center justify-content-center bg-white border-0 py-2">
+                                <a class="btn btn-outline-primary border px-2 pt-2 " asp-page="./Details" asp-route-id="@product.Id">Details</a>
+                                <button asp-page-handler="AddToCart" asp-route-productId="@product.Id" class="btn btn-outline-info border px-2 pt-2 icon-hover"><i class="fas fa-cart-plus fa-lg text-secondary px-1"></i></button>
+                                <button asp-page-handler="AddToWishlist" asp-route-productId="@product.Id" class="btn btn-outline-danger border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg text-secondary px-1"></i></button>
+                            </form>
+                        </div>
+                        <img>
+                        <div class="d-flex flex-column h-100">
+                            @* Card Content *@
+                            <h5 class="card-title">@product.Name</h5>
+                            @if (product.HasDiscount)
+                            {
+                                <p class="text-success fw-bold mb-0">@product.Discount% OFF</p>
+                                <div class="d-flex gap-2">
+
+                                    <span class="text-decoration-line-through">
+                                        @product.Price.ToString("c2")
+                                    </span>
+                                    <span class="fw-bold">
+                                        @product.PriceAfterDiscount.ToString("c2")
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="">
+                                    @product.Price.ToString("c2")
+                                </span>
+                            }
+
+                            @if (product.IsOutOfStock)
+                            {
+                                <p class="text-warning mb-0 fw-bold">OUT OF STOCK</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>

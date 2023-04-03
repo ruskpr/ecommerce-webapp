@@ -1,0 +1,31 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+/*custom css*/
+
+.card-buttons {
+    opacity: 0;
+    transition: ease-in-out opacity 0.2s;
+}
+
+.card-image:hover + .card-buttons,
+.card-buttons:hover {
+    opacity: 1;
+}

@@ -1,0 +1,24 @@
+﻿@page
+@model SleekClothing.Pages.admin.categories.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Category</h4>
+    <hr />
+    <p class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Category.Id)
+    </p>
+    <br/>
+    <p class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Category.Name)
+    </p>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Category?.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
