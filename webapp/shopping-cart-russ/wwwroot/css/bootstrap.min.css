@@ -3007,7 +3007,7 @@ textarea.form-control-lg {
 
 .btn {
     --bs-btn-padding-x: 1rem;
-    --bs-btn-padding-y: 0.35rem;
+    --bs-btn-padding-y: 0.45rem;
     /*--bs-btn-font-family:;*/
     --bs-btn-font-size: 1rem;
     --bs-btn-font-weight: 400;

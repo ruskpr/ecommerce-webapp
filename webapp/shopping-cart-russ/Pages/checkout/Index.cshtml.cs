@@ -20,12 +20,12 @@ namespace SleekClothing.Pages.checkout
 
         public void OnGet()
         {
-            // redirect user to login if they are not logged in
-            //if (User.Identity.IsAuthenticated == false)
-            //{
-            //    Response.Redirect("/login");
-            //    return;
-            //}
+            //redirect user to login if they are not logged in
+            if (User.Identity.IsAuthenticated == false)
+            {
+                Response.Redirect("/Identity/Account/Login");
+                return;
+            }
 
             var user = UsersHelper.GetUser(_context, User);
             Products = CartHelper.GetGroupedCartItemsDb(user.Id, _context);
