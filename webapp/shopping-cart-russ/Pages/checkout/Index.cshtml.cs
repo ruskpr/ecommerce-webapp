@@ -13,7 +13,7 @@ namespace SleekClothing.Pages.checkout
         public List<Product> Products { get; set; } = new List<Product>();
         public decimal CartTotal { get; private set; }
 
-        public IndexModel(SleekClothing.Data.ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,11 +21,11 @@ namespace SleekClothing.Pages.checkout
         public void OnGet()
         {
             // redirect user to login if they are not logged in
-            if (User.Identity.IsAuthenticated == false)
-            {
-                Response.Redirect("/login");
-                return;
-            }
+            //if (User.Identity.IsAuthenticated == false)
+            //{
+            //    Response.Redirect("/login");
+            //    return;
+            //}
 
             var user = UsersHelper.GetUser(_context, User);
             Products = CartHelper.GetGroupedCartItemsDb(user.Id, _context);

@@ -6,16 +6,20 @@
 
 @if (TempData["success"] != null)
 {
-<script type="text/javascript">
-        toastr.success('@TempData["success"]');      
-</script>
+    <script type="text/javascript">
+            toastr.success('@TempData["success"]');      
+    </script>
 }
-
 @if (TempData["error"] != null)
 {
-
-<script type="text/javascript">
-        toastr.error('@TempData["error"]');        
-</script>
+    <script type="text/javascript">
+            toastr.error('@TempData["error"]');        
+    </script>
+}
+@if (TempData["info"] != null)
+{
+    <script type="text/javascript">
+        toastr.info('@TempData["info"]');
+    </script>
 }
 

@@ -37,6 +37,7 @@
     <title>@ViewData["Title"] - Sleek Clothing</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
     @*<link rel="stylesheet" href="~/SleekEcommerce.styles.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
@@ -48,8 +49,8 @@
                 <div class="row gy-3">
                     <!-- Left elements -->
                     <div class="col d-flex align-baseline d-none d-sm-block ">
-                        <a href="/" class="float-start navbar-brand text-nowrap">
-                            Sleek Clothing Co.
+                        <a href="/" class="float-start fs-5 fw-semibold navbar-brand text-nowrap">
+                            Sleek Clothing Store
                         </a>
                     </div>
                     <!-- Left elements -->
@@ -102,7 +103,7 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li class="px-3 nav-item">
-                            <a class="nav-link text-info border-dark border rounded px-2 bg-dark fw-bold" href="/admin">Admin</a>
+                            <a class="btn btn-info fw-bold" href="/admin">Admin</a>
                         </li>
                     }
                 </ul>

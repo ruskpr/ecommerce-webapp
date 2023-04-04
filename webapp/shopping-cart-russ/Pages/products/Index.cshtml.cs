@@ -43,6 +43,12 @@ namespace SleekClothing.Pages.products
 
         public IActionResult OnPostSearch()
         {
+            if (string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                TempData["info"] = $"Please enter a valid search term.";
+                return Redirect("/products");
+            }
+
             Products = _context.Products.Where(x => x.Name.Contains(SearchTerm) || x.Category.Name.Contains(SearchTerm)).ToList();
             return Page();
         }

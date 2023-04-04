@@ -19,26 +19,36 @@ namespace SleekClothing.Pages.admin.products
             _context = context;
         }
 
+        public List<Category> Categories { get; set; }
+
         public IActionResult OnGet()
         {
+            Categories = _context.Categories.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+
             return Page();
         }
 
         [BindProperty]
         public Product Product { get; set; }
         
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+            Categories = _context.Categories.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+
+            
+            Product.Category = Categories[0];
+
+            if (!ModelState.IsValid)
             {
+                TempData["error"] = "Failed to submit.";
                 return Page();
             }
 
             _context.Products.Add(Product);
             await _context.SaveChangesAsync();
 
+            return Page();
             return RedirectToPage("./Index");
         }
     }
