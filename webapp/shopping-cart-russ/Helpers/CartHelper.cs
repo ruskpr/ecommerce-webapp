@@ -194,6 +194,33 @@ namespace SleekClothing.Helpers
             context.SaveChanges();
         }
 
+        internal static void ClearCartDb(ClaimsPrincipal userClaim, ApplicationDbContext context)
+        {
+            if (userClaim == null && context == null) { return; }
+            var user = UsersHelper.GetUser(context, userClaim);
+
+            var userCart = context.UserCarts.Where(x => x.UserId == user.Id).First();
+
+            if (userCart == null) return;
+
+            var productsList = JsonConvert.DeserializeObject<List<Product>>(userCart.CartDataJSON);
+
+            if (productsList != null)
+            {
+                productsList.Clear();
+
+                string newCartJson = JsonConvert.SerializeObject(productsList, Formatting.Indented);
+
+                //userCart.UserId = user.Id;
+                userCart.CartDataJSON = newCartJson;
+            }
+            else
+            {
+                return;
+            }
+
+            context.SaveChanges();
+        }
         public static void RemoveFromCartDb(Product product, ApplicationDbContext context, ClaimsPrincipal userClaim)
         {
             if (userClaim == null && context == null) { return; }
@@ -346,6 +373,8 @@ namespace SleekClothing.Helpers
 
             DeleteCartCookie(httpContext);
         }
+
+        
         #endregion
     }
 }

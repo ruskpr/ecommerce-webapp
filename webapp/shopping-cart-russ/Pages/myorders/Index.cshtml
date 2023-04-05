@@ -1,0 +1,76 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity;
+@using SleekClothing.Helpers;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model shopping_cart_russ.Pages.myorders.IndexModel
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h1 class="py-3">My Orders</h1>
+
+@* if there are items in the user's cart, show cart details *@
+@if (SignInManager.IsSignedIn(User) && Model.Orders.Count > 0)
+{
+    @foreach (var order in Model.Orders)
+    {
+        <div class="card p-4 my-4 bg-light">
+
+            <h2 class="text-primary fw-bold">@order.DateOrdered.ToLongDateString() <span class="fw-light">@order.DateOrdered.ToLocalTime().ToLongTimeString()</span></h2>
+            <strong>Order ID: @order.Id</strong>
+            <br/>
+            <h4>Personal Information</h4>
+            <ul>
+                <li>First name: @order.FirstName</li>
+                <li>Last name: @order.LastName</li>
+                <li>Email: @order.Email</li>
+            </ul>
+            <br/>
+
+            <h4>Shipping details</h4>
+            <ul>
+                <li>Address @order.Address</li>
+                <li>Address 2: @order.Address2</li>
+                <li>Country: @order.Country</li>
+                <li>Province: @order.Province</li>
+                <li>Postal code: @order.PostalCode</li>
+            </ul>
+            <br/>
+
+            <h4>Products ordered</h4>
+            <ul>
+                @foreach (var product in order.OrderedProducts)
+                {
+                    <li>@product.Name &nbsp;<strong>x @product.CartQuantity</strong></li>
+                }
+            </ul>
+            
+            <br/>
+
+            <h2>Total: <span class="text-info fw-bold">@order.TotalCost.ToString("c2")</span></h2>
+
+        </div>
+       
+    }
+    
+}
+else if (SignInManager.IsSignedIn(User) && Model.Orders.Count == 0)
+{
+    <div style="padding: 100px 0px;">
+        <span>You have not made any orders.</span>
+    </div>    
+}
+else
+{
+    <div style="padding: 100px 0px;">
+        <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to view your orders.</span>
+    </div>    
+}
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>

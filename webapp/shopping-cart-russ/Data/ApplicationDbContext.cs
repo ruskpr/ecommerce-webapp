@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SleekClothing.Models;
 
 namespace SleekClothing.Data
 {
@@ -10,9 +11,11 @@ namespace SleekClothing.Data
         {
         }
 
-        public DbSet<SleekClothing.Models.Product> Products { get; set; }
-        public DbSet<SleekClothing.Models.Category> Categories { get; set; }
-        public DbSet<SleekClothing.Models.UserCart> UserCarts { get; set; }
-        public DbSet<Models.UserWishlist> UserWishlists { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<UserCart> UserCarts { get; set; }
+        public DbSet<UserWishlist> UserWishlists { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
     }
 }

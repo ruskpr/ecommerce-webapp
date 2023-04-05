@@ -18,33 +18,187 @@
 @* if there are items in the user's cart, show cart details *@
 @if (SignInManager.IsSignedIn(User) && Model.Products.Count > 0)
 {
-    @foreach (var product in Model.Products)
-    {
-        <div class="card m-4" >
-            <div class="row g-0">
-                <div class="col">
-                    <img src="@product.ImageLocation" class="h-100 img-fluid rounded-start" alt="@product.Name">
-                </div>
-                <div class="col-10">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
+    <form method="post" class="container">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-start gap-3 align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <a href="/cart" class="btn btn-outline-primary">Edit &nbsp;<span class="fa fa-edit"></span></a>
+                </h4>
+                <ul class="list-group mb-3">
+                    @foreach (var product in Model.Products)
+                    {
+                        <li class=" list-group-item d-flex justify-content-between ">
+                            <div>
+                                <img class="" src="@product.ImageLocation" height="50" width="50" />
+                            </div>
+                            <div class="text-start w-100 px-2">
+                                <h6 class="my-0">@product.Name</h6>
+                                <small class="text-muted">Quantity: @product.CartQuantity</small>
+                            </div>
+                            <div class="text-end" style="width: 120px">
+                                @if (product.HasDiscount)
+                                {
+                                    <strong class="text-success">@product.Discount% OFF</strong>
+                                    <br />
+                                }
+                                <span class="text-muted">@product.PriceAfterDiscount.ToString("C2")</span>
+                            </div>
+                        </li>
+                    }
 
-                       <div class="d-flex align-items-center gap-2 fs-3 bg-light border px-2 rounded">
-                            <p class="card-text my-2 fw-bold">@product.PriceAfterDiscount.ToString("c2")</p>
-                            <span>x @product.CartQuantity</span>
-                       </div>
+                    <li class="bg-light list-group-item rounded-bottom">
+                        <div class="d-flex justify-content-between">
+                            <span>Your total</span>
+                            <span class="fw-light text-muted">@Model.CartTotal.ToString("C2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Total + 5% GST</span>
+                            <span class="text-info fw-bold text-decoration-underline">@Model.CartTotalAfterGst.ToString("C2")</span>
+                        </div>
+                    </li>
+
+                    <li style="list-style-type: none;">
+                        <button class="btn btn-primary btn-lg mt-3 float-end" asp-page-handler="Checkout" type="submit">Pay @Model.CartTotalAfterGst.ToString("c2")</button>
+                    </li>
+
+                </ul>
+            </div>
 
 
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Personal Information</h4>
+                <div>
+                    <input hidden asp-for="Order.ProductDataAsJson" value="json-data">
+                    <input hidden asp-for="Order.TotalCost" value="@Model.CartTotalAfterGst">
+
+                    @* FIRST NAME AND LAST NAME *@
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Order.FirstName">First name</label>
+                            <input asp-for="Order.FirstName" type="text" class="form-control">
+                            <span asp-validation-for="Order.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Order.LastName">Last name</label>
+                            <input asp-for="Order.LastName" type="text" class="form-control">
+                            <span asp-validation-for="Order.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @* EMAIL *@
+                    <div class="mb-3">
+                        <label asp-for="Order.Email">Email</label>
+                        <input asp-for="Order.Email" type="text" class="form-control" value="@Model.User.Identity.Name" placeholder="someone@example.com">
+                        <span asp-validation-for="Order.Email" class="text-danger"></span>
+                    </div>
+
+                    <br />
+                    <h4 class="mb-3">Shipping Details</h4>
+
+                    @* ADDRESS *@
+                    <div class="mb-3">
+                        <label asp-for="Order.Address">Address</label>
+                        <input asp-for="Order.Address" type="text" class="form-control">
+                        <span asp-validation-for="Order.Address" class="text-danger"></span>
+                    </div>
+
+                    @* ADDRESS 2 *@
+                    <div class="mb-3">
+                        <label asp-for="Order.Address2">Address 2 <span class="text-muted">(optional)</span></label>
+                        <input asp-for="Order.Address2" type="text" class="form-control">
+                        <span asp-validation-for="Order.Address2" class="text-danger"></span>
+                    </div>
+
+                    @* COUNTRY *@
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label asp-for="Order.Country">Country</label>
+                            <select asp-for="Order.Country" class="form-select d-block">
+                                <option value="Canada" selected>Canada</option>
+                            </select>
+                            <span asp-validation-for="Order.Country" class="text-danger"></span>
+                        </div>
+
+                        @* PROVINCE *@
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Order.Province">Province</label>
+                            <select asp-for="Order.Province" class="form-select d-block w-100">
+                                <option value="Alberta" selected>Alberta</option>
+                                <option value="Saskatchewan">Saskatchewan</option>
+                                <option value="British Columbia">British Columbia</option>
+                            </select>
+                            <span asp-validation-for="Order.Province" class="text-danger"></span>
+                        </div>
+
+                        @* POSTAL CODE *@
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="Order.PostalCode">Postal code</label>
+                            <input asp-for="Order.PostalCode" type="text" class="form-control">
+                            <span asp-validation-for="Order.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <br />
+                    <h4 class="mb-3">Payment</h4>
+
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="credit">Credit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input">
+                            <label class="custom-control-label" for="debit">Debit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input">
+                            <label class="custom-control-label" for="paypal">PayPal</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cc-name">Name on card</label>
+                            <input type="text" class="form-control" id="cc-name" placeholder="">
+                            <small class="text-muted">Full name as displayed on card</small>
+                            <div class="invalid-feedback">
+                                Name on card is
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cc-number">Credit card number</label>
+                            <input type="text" class="form-control" id="cc-number" placeholder="">
+                            <div class="invalid-feedback">
+                                Credit card number is
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="cc-expiration">Expiration</label>
+                            <input type="text" class="form-control" id="cc-expiration" placeholder="">
+                            <div class="invalid-feedback">
+                                Expiration date
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="cc-cvv">CVV</label>
+                            <input type="text" class="form-control" id="cc-cvv" placeholder="">
+                            <div class="invalid-feedback">
+                                Security code
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
-    }
-    <p class="fw-light fs-4 mx-4">Total @Model.CartTotal.ToString("c2")</p>
-    <a href="/checkout" class="btn btn-primary mx-4">Checkout</a>
-    <span class="fs-6"><a href="/products">Browse products</a></span>
+        <br />
+        <br />
+        <br />
+        <br />
+    </form>
 }
 else if (SignInManager.IsSignedIn(User) && Model.Products.Count == 0)
 {
@@ -60,3 +214,5 @@ else
         <span><a href="/Identity/Account/Register">Signup</a> or <a href="/Identity/Account/Login">Login</a> to start shopping.</span>
     </div>    
 }
+
+

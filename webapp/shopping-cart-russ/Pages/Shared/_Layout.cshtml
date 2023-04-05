@@ -96,6 +96,12 @@
                         <a class="nav-link text-dark" href="/wishlist">Wishlist</a>
                     </li>
 
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="px-3 nav-item">
+                            <a class="nav-link text-dark" href="/myorders">My orders</a>
+                        </li>
+                    }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li class="px-3 nav-item">
