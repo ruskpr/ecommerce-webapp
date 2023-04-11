@@ -41,7 +41,7 @@ namespace SleekClothing.Pages
             if (product.IsOutOfStock)
             {
                 TempData["error"] = $"{product.Name} is out of stock.";
-                return Redirect("/products");
+                return Redirect("/");
             }
 
             var u = UsersHelper.GetUser(_context, this.User);
@@ -49,7 +49,7 @@ namespace SleekClothing.Pages
             CartHelper.AddToCartDb(product, _context, this.User);
 
             TempData["success"] = $"{product.Name} added to cart successfully!";
-            return Redirect("/products");
+            return Redirect("/");
         }
 
         public IActionResult OnPostAddToWishlist(int productId)
@@ -66,12 +66,12 @@ namespace SleekClothing.Pages
                 Products = _context.Products.ToList();
 
                 TempData["success"] = $"{product.Name} has been added to your wishlist.";
-                return Redirect("/products");
+                return Redirect("/");
             }
             catch
             {
                 TempData["error"] = $"Login to add items to your cart.";
-                return Redirect("/products");
+                return Redirect("/");
             }
         }
     }
