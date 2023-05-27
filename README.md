@@ -42,11 +42,7 @@ As a normal user (or customer), you can browse the product catalog and add items
 
 ### Admin
 
-As an admin, you can manage the product catalog, view and edit customer orders, and manage customer accounts. To access the admin portal, you'll need to log in with an admin account.
-
-## Contributing
-
-If you would like to contribute, feel free to open an issue or pull request on the repository.
+As an admin, you can manage the product catalog, view and edit customer orders, and manage customer accounts. To access the admin portal, you'll need to log in with an admin account.\
 
 ## License
 
